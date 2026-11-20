@@ -504,7 +504,7 @@ i.pill{font-style:normal}
 .readbox{display:grid;gap:10px;padding:14px;border-radius:14px;background:var(--surface2)}.readko{font-size:20px;line-height:1.7;font-weight:700}.reades{font-size:14px;line-height:1.6;color:var(--ink2)}
 .tedit{border:1px dashed var(--line);border-radius:12px;padding:8px 10px;font-size:13px}.tedit summary{cursor:pointer;color:var(--ink2)}.tedit label{display:grid;gap:4px;margin:8px 0}
 .intro{display:none!important}.realbar{display:flex;gap:8px;align-items:center;justify-content:center;padding:40px 16px;flex-direction:column;text-align:center}
-.gcard.g-wk{background:color-mix(in srgb,var(--ok) 26%,var(--surface));border-color:color-mix(in srgb,var(--ok) 60%,transparent)}.gcard.g-sa{background:color-mix(in srgb,var(--warn) 26%,var(--surface));border-color:color-mix(in srgb,var(--warn) 60%,transparent)}.gcard.g-su{background:color-mix(in srgb,var(--b1) 26%,var(--surface));border-color:color-mix(in srgb,var(--b1) 60%,transparent)}.gcard.g-pv{background:color-mix(in srgb,var(--ink2) 14%,var(--surface))}.gcard .gstats span{background:color-mix(in srgb,var(--surface) 55%,transparent)}.strip .chip .cs{font-size:12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}</style>
+.gcard.g-wk{background:color-mix(in srgb,var(--ok) 26%,var(--surface));border-color:color-mix(in srgb,var(--ok) 60%,transparent)}.gcard.g-sa{background:color-mix(in srgb,var(--warn) 26%,var(--surface));border-color:color-mix(in srgb,var(--warn) 60%,transparent)}.gcard.g-su{background:color-mix(in srgb,var(--b1) 26%,var(--surface));border-color:color-mix(in srgb,var(--b1) 60%,transparent)}.gcard.g-pv{background:color-mix(in srgb,var(--ink2) 14%,var(--surface))}.gcard .gstats span{background:color-mix(in srgb,var(--surface) 55%,transparent)}.strip .chip .cs{font-size:12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}.hwdue{margin:6px 0 10px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));font-size:14px}.hwdue.off{background:var(--surface2,#2a2a2a);color:var(--ink2)}.hwcom{margin-top:12px;padding:12px 14px;border-radius:12px;border:1.5px solid color-mix(in srgb,#8e7cc3 70%,transparent);background:color-mix(in srgb,#8e7cc3 12%,var(--surface))}.hwcom h4{margin:0 0 8px;color:#a996e0}.hwc{padding:6px 0;border-top:1px dashed var(--line)}.hwc-bad{text-decoration:line-through;opacity:.7}.hwc-fix{white-space:pre-wrap;color:var(--ok)}.hwc-ok{color:var(--ok)}.hwcom p{margin:8px 0 0;white-space:pre-wrap}</style>
 
 <div class="wrap">
   <div class="intro">
@@ -1006,24 +1006,7 @@ async function makePdf(c){
   const xref=len;push(`xref\n0 6\n0000000000 65535 f \n${offs.map(o=>String(o).padStart(10,"0")+" 00000 n \n").join("")}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
   return new Blob(parts,{type:"application/pdf"});
 }
-const QA={
- 7:[{q:"뭐 드릴까요?",qe:"¿Qué le doy? / ¿Qué va a pedir?",g:"N 하나/둘 주세요",a:[["비빔밥 하나 주세요.","Un bibimbap, por favor."],["김치찌개 두 개 주세요.","Dos kimchi jjigae, por favor."]]},
-    {q:"몇 분이세요?",qe:"¿Cuántas personas son?",g:"숫자 + 명이에요",a:[["두 명이에요.","Somos dos."],["혼자예요.","Vengo solo/a."]]},
-    {q:"맵게 해 드릴까요?",qe:"¿Se lo preparo picante?",g:"안 V-게 해 주세요",a:[["아니요, 안 맵게 해 주세요.","No, sin picante, por favor."],["네, 조금 맵게 해 주세요.","Sí, un poco picante, por favor."]]},
-    {q:"여기서 드세요? 포장하세요?",qe:"¿Para comer aquí o para llevar?",g:"N 해 주세요",a:[["포장해 주세요.","Para llevar, por favor."],["여기서 먹을게요.","Aquí lo como."]]},
-    {q:"더 필요하신 거 있으세요?",qe:"¿Necesita algo más?",g:"N 좀 주세요",a:[["물 좀 주세요.","Agua, por favor."],["계산해 주세요.","La cuenta, por favor."]]}],
- 6:[{q:"가족이 몇 명이에요?",qe:"¿Cuántos son en tu familia?",g:"숫자 + 명이에요",a:[["네 명이에요.","Somos cuatro."],["다섯 명이에요.","Somos cinco."]]},
-    {q:"이분은 누구예요?",qe:"¿Quién es esta persona?",g:"이분은 제 N이에요/예요",a:[["제 어머니예요.","Es mi mamá."],["이분은 제 할아버지예요.","Él es mi abuelo."]]},
-    {q:"형제가 있어요?",qe:"¿Tienes hermanos?",g:"N이/가 있어요 / 없어요",a:[["네, 동생이 한 명 있어요.","Sí, tengo un hermano menor."],["아니요, 없어요.","No, no tengo."]]},
-    {q:"가족 사진이 있어요?",qe:"¿Tienes una foto de tu familia?",g:"N이/가 있어요",a:[["네, 있어요. 이거예요.","Sí, tengo. Es esta."]]}],
- 5:[{q:"지금 몇 시예요?",qe:"¿Qué hora es?",g:"(고유어) 시 + (한자어) 분이에요",a:[["세 시 반이에요.","Son las tres y media."],["열 시 십오 분이에요.","Son las diez y cuarto."]]},
-    {q:"수업이 몇 시에 있어요?",qe:"¿A qué hora es la clase?",g:"N에 있어요",a:[["일곱 시 사십오 분에 있어요.","Es a las 7:45."]]},
-    {q:"오전이에요? 오후예요?",qe:"¿Es a.m. o p.m.?",g:"오전/오후 + 시간",a:[["오후 두 시예요.","Son las 2 p.m."],["오전 아홉 시예요.","Son las 9 a.m."]]}],
- 4:[{q:"몇 시에 일어나요?",qe:"¿A qué hora te levantas?",g:"V-아요/어요",a:[["일곱 시에 일어나요.","Me levanto a las siete."]]},
-    {q:"어디에 가요?",qe:"¿A dónde vas?",g:"N에 가요",a:[["회사에 가요.","Voy a la oficina."],["학교에 가요.","Voy a la escuela."]]},
-    {q:"아침을 먹어요?",qe:"¿Desayunas?",g:"V-아요/어요 · 안 V",a:[["네, 매일 먹어요.","Sí, desayuno todos los días."],["아니요, 안 먹어요.","No, no desayuno."]]},
-    {q:"보통 몇 시에 자요?",qe:"¿A qué hora duermes normalmente?",g:"N에 V-아요/어요",a:[["열한 시에 자요.","Me duermo a las once."]]}]
-};
+const QA={};
 const PC=()=>CLASSES.find(c=>c.n===S.pcls)||CLASSES[0];
 function vPrac(){
   if(!CLASSES.length)return `<h2>Práctica</h2><div class="card span2"><b>Aquí practicarás lo de cada clase</b><div class="muted">Preguntas, tarjetas y quiz con el vocabulario de tu grupo.</div><div class="example">시안: 실제 수업 기록은 아직 Intensivo 10:00 반만 연결했어요</div></div>`;
@@ -1075,12 +1058,22 @@ function hwItems(items,ctx){let qn=0;return items.map(x=>{
     return `<div class="hwans ro"><span>Tu respuesta</span><div class="hwsa ko">${v?esc(v):`<i class="muted">Sin respuesta</i>`}</div>${fb?`<div class="hwfbv ${fb==="✓"?"ok":""}"><b>Prof.:</b> ${fb==="✓"?"¡Correcto! ✓":esc(fb)}</div>`:""}</div>`}
   const k=x.k||"",ko=/[가-힣]/.test(x.t);
   return `<p class="hwl ${k?"hw-"+k:""} ${ko?"ko":""}">${esc(x.t)}</p>`}).join("")}
-function hwBlock(iso,blocks,editable){const k=hwKey(ANA.gid,ANA.name,iso),R=HWA[k]||{st:"pendiente"},canEdit=editable&&live()&&R.st==="pendiente";
+function hwBlock(iso,blocks,editable){const k=hwKey(ANA.gid,ANA.name,iso),R=HWA[k]||{st:"pendiente"},due=(blocks[0]||{}).due||"",open=!due||Date.now()<Date.parse(due),canEdit=editable&&live()&&R.st==="pendiente"&&open;
   const st=R.st==="pendiente"?`<span class="pill p-red">Pendiente</span>`:R.st==="entregada"?`<span class="pill p-warn">Entregada · en revisión</span>`:`<span class="pill p-ok">✓ Revisada</span>`;
   const nq=blocks.reduce((a,b)=>a+b.items.filter(x=>x.ans).length,0),done=Object.values((HWA[k]||{a:{}}).a).filter(v=>v&&v.trim()).length;
-  return {st:live()?st:"",html:`<div class="hwbox">${blocks.map(b=>hwItems(b.items,{k,mode:canEdit?"edit":"ro"})).join("")}</div>
-   ${R.note?`<div class="notice"><b>Prof. Héctor:</b> ${esc(R.note)}</div>`:""}
+  return {st:live()?st:"",html:`${due?`<div class="hwdue ${open?"":"off"}" data-due="${due}">${dueTxt(due)}</div>`:""}<div class="hwbox">${blocks.map(b=>hwItems(b.items,{k,mode:canEdit?"edit":"ro"})).join("")}</div>
+   ${hwCom(blocks,R)}
    ${live()?(canEdit?`<div class="row hwfoot"><span class="muted">${done} de ${nq} respondidas · se guarda solo</span><button class="btn sm" data-act="hwSubmit" data-hk="${k}">Entregar tarea</button></div>`:""):`<div class="note">En Plan Oyente puedes hacerla por tu cuenta; la entrega y corrección son del Plan En vivo.</div>`}`}}
+const DUEF=new Intl.DateTimeFormat("es-MX",{timeZone:"America/Mexico_City",weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
+function dueTxt(due){const t=Date.parse(due),ms=t-Date.now(),when=DUEF.format(new Date(t));
+  if(ms<=0)return `⏰ Se cerró la entrega · ${when}`;
+  const m=Math.floor(ms/6e4),d=Math.floor(m/1440),h=Math.floor(m%1440/60),mm=m%60;
+  return `⏰ Faltan <b>${d?d+" d ":""}${h} h ${mm} min</b> · entrega antes del ${when}`}
+setInterval(()=>document.querySelectorAll(".hwdue[data-due]").forEach(e=>{e.innerHTML=dueTxt(e.dataset.due);if(Date.now()>=Date.parse(e.dataset.due))e.classList.add("off")}),30000);
+function hwCom(blocks,R){if(!R||R.st!=="revisada")return "";let q="",n=0;const rows=[];
+  blocks.forEach(b=>b.items.forEach(x=>{if(x.k==="q"){q=x.t;return}if(!x.ans)return;n++;const fb=(R.fb||{})[x.ans]||"",v=(R.a||{})[x.ans]||"";
+    if(fb&&fb!=="✓")rows.push(`<div class="hwc"><div class="muted">${q?esc(q.split("\n")[0]):"Pregunta "+n}</div>${v?`<div class="ko hwc-bad">${esc(v)}</div>`:""}<div class="ko hwc-fix">${esc(fb)}</div></div>`)}));
+  return `<div class="hwcom"><h4>Comentario</h4>${rows.join("")||`<div class="hwc-ok">¡Todo correcto! ✓</div>`}${R.note?`<p>${esc(R.note)}</p>`:""}</div>`}
 function vTareas(){
   const H=HWD[ANA.gid];
   if(H&&CLASSES.length){
@@ -1089,7 +1082,7 @@ function vTareas(){
       <div class="muted">De la clase ${last.n} · ${last.date}</div>${B.html}</div>`
       :`<div class="card span2 nohw"><div class="big">🎉 No hay tarea</div><div>Para la próxima clase${nx?" ("+fmtEs(nx)+")":""} no hay tarea. ¡Nos vemos en clase!</div></div>`;
     const prev=CLASSES.slice(1).map(c=>{const b=H[c.iso];return `<details class="card hwprev"><summary><span><b>Clase ${c.n}</b> · ${c.date}</span><span class="ko muted">${c.ko}</span>${b?`<span class="pill p-gray">Tarea</span>`:`<span class="pill p-ok">Sin tarea</span>`}</summary>${b?hwBlock(c.iso,b,true).html:`<div class="muted">Esta clase no dejó tarea.</div>`}</details>`}).join("");
-    return `<h2>Tareas</h2>${top}<div class="example span2">시안: 수업 Doc 숙제를 문제별로 나눠, 문제 밑에 답 칸을 넣었어요(교재 사진도 문제마다 잘라서). 제출하면 선생님 › 숙제에서 문제별로 확인·코멘트할 수 있어요.</div><div class="span2 hwlist"><h3 style="margin:6px 0 0">Tareas anteriores</h3>${prev}</div>`;
+    return `<h2>Tareas</h2>${top}<div class="span2 hwlist"><h3 style="margin:6px 0 0">Tareas anteriores</h3>${prev}</div>`;
   }
   if(!live()) return `<h2>Tareas</h2>${lockCard("Entregar tareas")}<div class="card"><h3>Tarea de esta semana</h3><div>Escribe 3 oraciones para pedir comida en un restaurante coreano.</div><div class="muted">Puedes verla y practicar por tu cuenta.</div></div>`;
   const h=S.hw;
@@ -1127,11 +1120,11 @@ function vCuenta(){
   </div>
   <div class="card"><h3>Avance</h3><div class="li"><span class="muted">Libro</span><span>${ANA.book} · ${ANA.lesson}</span></div><div class="li"><span class="muted">Última clase</span><span>${ANA.last}</span></div><div class="meter"><i style="width:${G().cur/G().dates.length*100}%"></i></div><div class="muted">Clase ${G().cur+1} de ${G().dates.length} del 2026-4 · termina el ${ANA.end}</div></div>
   <div class="card soft"><div class="row"><div><b>Siguiente periodo · enero 2027</b><div class="muted">Te avisamos aquí cuando abran las inscripciones</div></div><button class="btn sm" data-act="goEnroll">Inscribirme / Renovar</button></div></div>
-  <div class="card span2"><h3>Calificaciones y constancias</h3>${(()=>{const c=CERT[ANA.gid+"|"+ANA.name];
+  <div class="card span2"><h3>Calificaciones y constancias</h3>${(()=>{const c=(window.__CERTS||[]).find(x=>x.sem==="2026-3");
     const row2026_4=`<div class="sem"><div class="row"><b>Periodo 2026-4</b><span class="pill p-warn">En curso</span></div><div class="muted">El examen final es al terminar el periodo (${ANA.end}). Tu calificación aparecerá aquí.</div></div>`;
     const row2026_3=c?`<div class="sem"><div class="row"><b>Periodo 2026-3</b><span class="pill p-ok">Examen final · ${c.f}</span></div>
       <div class="scores"><div class="sc big"><b>${c.tot}</b><span>/100 · Total</span></div><div class="sc"><b>${c.v}</b><span>/30 Vocabulario</span></div><div class="sc"><b>${c.g}</b><span>/50 Gramática</span></div><div class="sc"><b>${c.e}</b><span>/20 Escritura</span></div></div>
-      <div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><a class="btn sm" href="${dl(c.es)}" target="_blank" rel="noopener">⬇ Constancia · Español (PDF)</a><a class="btn sm alt" href="${dl(c.ko)}" target="_blank" rel="noopener">⬇ Constancia · 한국어 (PDF)</a></div></div>`
+      ${c.pdf?`<div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><a class="btn sm" href="${esc(c.pdf)}" target="_blank" rel="noopener">⬇ Constancia (PDF)</a></div>`:`<div class="muted">Tu constancia está en preparación. Te avisamos aquí cuando esté lista.</div>`}</div>`
       :`<div class="sem"><div class="row"><b>Periodo 2026-3</b><span class="pill p-gray">Sin registro</span></div><div class="muted">No encontramos examen final de este periodo. La constancia se emite al presentar el examen final.</div></div>`;
     return row2026_4+row2026_3+`<div class="muted" style="font-size:12.5px">Los exámenes finales empezaron en el periodo 2026-3.</div>`})()}</div>`;
 }
@@ -1947,7 +1940,8 @@ function flushAns(){const L=Object.values(AQ);Object.keys(AQ).forEach(k=>delete 
 function loadGroup(g){
   const id=ID_IN[g.id]||g.id;
   const dur=/^(sab|dom)/.test(id)&&id!=="dom9"?"2:00:00":"1:00:00";
-  REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur}));
+  const QQ=(window.__QA||{})[g.id]||{};
+  REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur},QQ[c.iso]?{qa:QQ[c.iso]}:{}));
   ATTD[id]=g.att||{};HWD[id]=g.hw||{};RECS[id]=g.recs||{};
   const gr=GRP.find(x=>x.id===id);if(gr&&g.students)gr.st=g.students.slice();
   STAT[id]={};(g.students||[]).forEach(n=>{let p=0,t=0;Object.values(g.att||{}).forEach(a=>{if(a[n]){t++;if(a[n]==="P")p++}});STAT[id][n]=[p,t]});
@@ -2005,10 +1999,10 @@ function start(){
   $("#screen").innerHTML=`<div class="realbar"><div class="muted">Cargando tus clases…</div></div>`;
   api("data").then(d=>{
     const m=ME||{};
-    if(m.role==="teacher"){Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
+    if(m.role==="teacher"){window.__QA=d.preguntas||{};Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
       const first=GRP.find(g=>g.st&&g.st.length)||GRP[0];S.who={g:first.id,n:first.st[0]||""};applyWho();
       api("hwList").then(L=>{HWLIST=L||[];render()});render();return}
-    if(m.role==="student"&&d.group){loadGroup(d.group);const gid=ID_IN[m.gid]||m.gid;if(d.progreso)PROG[gid]=d.progreso;
+    if(m.role==="student"&&d.group){window.__QA={[d.group.id]:d.preguntas||{}};window.__CERTS=d.certs||[];loadGroup(d.group);const gid=ID_IN[m.gid]||m.gid;if(d.progreso)PROG[gid]=d.progreso;
       S.who={g:gid,n:m.sname||m.name};S.admin=false;S.role=m.plan==="oyente"?"oyente":"vivo";S.account.plan=S.role;S.tab="hoy";applyWho();
       Object.entries(d.hw||{}).forEach(([iso,v])=>{HWA[hwKey(gid,m.name,iso)]=v});
       (d.avisos||[]).forEach(a=>S.avisos&&S.avisos.unshift&&S.avisos.unshift({t:a.text,at:a.at}));
