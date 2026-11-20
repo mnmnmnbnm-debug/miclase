@@ -1951,6 +1951,27 @@ function loadGroup(g){
   const gr=GRP.find(x=>x.id===id);if(gr&&g.students)gr.st=g.students.slice();
   STAT[id]={};(g.students||[]).forEach(n=>{let p=0,t=0;Object.values(g.att||{}).forEach(a=>{if(a[n]){t++;if(a[n]==="P")p++}});STAT[id][n]=[p,t]});
 }
+
+/* Profesor: alumnos reales, 1:1 desde Calendar y progreso desde la hoja Progreso */
+function applyTeacher(d){
+  Object.entries(d.progreso||{}).forEach(([k,v])=>{PROG[ID_IN[k]||k]=v});
+  const PV=d.privados||[];
+  PRIVL=PV.filter(p=>p.tipo!=="preply").map(p=>({n:p.n,days:[],t:p.t,e:p.e,from:p.from,until:p.until,note:p.note}));
+  const C=d.cal1||[];
+  PREPLY=C.filter(x=>x.src==="preply").map(x=>[x.date,x.t,x.e,x.who]);
+  Object.keys(EXTRA).forEach(k=>delete EXTRA[k]);Object.keys(SKIP).forEach(k=>delete SKIP[k]);
+  C.filter(x=>x.src!=="preply").forEach(x=>(EXTRA[x.date]=EXTRA[x.date]||[]).push({t:x.t,e:x.e,g:"1:1 "+x.who,n:1,k:"priv"}));
+  const R=d.alumnos||[],mk=(n,gid,g,o)=>Object.assign({id:++_sid,n,gid,g,lv:"",plan:"vivo",pay:"unk",until:"결제 정보 연동 전",att:null,quiz:null,hw:null,last:"—",since:"2026-4",mail:"—",tel:"—",att7:null},o||{});
+  STUDENTS.length=0;_sid=0;
+  GRP.forEach(g=>{const sid=ID_OUT[g.id]||g.id,p=PROG[g.id]||{},seen={};
+    R.filter(r=>r.gid===sid&&r.estado!=="inactivo").forEach(r=>{const n=r.name||r.email.split("@")[0];seen[n]=1;
+      const a=(STAT[g.id]||{})[r.name];STUDENTS.push(mk(n,g.id,g.name,{plan:r.plan==="oyente"?"oyente":"vivo",mail:r.email,lv:p.book?`${p.book} ${p.lesson||""}`.trim():"",att:a&&a[1]?a[0]/a[1]*100:null,last:r.name?"":"이름 확인 필요"}))});
+    (g.st||[]).forEach(n=>{if(!seen[n]){const a=(STAT[g.id]||{})[n];STUDENTS.push(mk(n,g.id,g.name,{lv:"",att:a&&a[1]?a[0]/a[1]*100:null,mail:"(이메일 없음)"}))}});
+    if(GMETA[g.name]&&p.book)GMETA[g.name].topic=`${p.book} ${p.lesson||""}${p.page?" "+p.page:""} · 최근 ${p.recentDate||""}`;
+  });
+  const priv=PV.map(p=>mk(p.n,"priv","1:1 과외",{lv:p.tipo==="preply"?"Preply":"Clase privada",plan:"vivo",mail:p.email||"—",last:p.note||"—"}));
+  if(priv.length){priv.forEach(x=>STUDENTS.push(x));GMETA["1:1 과외"]={lv:"1:1",when:"개인별 시간 (Calendar 기준)",cur:0,tot:1,topic:`${C.filter(x=>x.date>=TODAY).length}회 예정`}}
+}
 function setToken(cred){
   try{const p=JSON.parse(atob(cred.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));localStorage.setItem("mc_tok",JSON.stringify({v:cred,exp:p.exp*1000}))}catch(e){}
   TOK=cred;start();
@@ -1969,11 +1990,11 @@ function start(){
   $("#screen").innerHTML=`<div class="realbar"><div class="muted">Cargando tus clases…</div></div>`;
   api("data").then(d=>{
     const m=ME||{};
-    if(m.role==="teacher"){Object.values(d.all||{}).forEach(loadGroup);S.role="prof";S.profTab="panel";
+    if(m.role==="teacher"){Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
       const first=GRP.find(g=>g.st&&g.st.length)||GRP[0];S.who={g:first.id,n:first.st[0]||""};applyWho();
       api("hwList").then(L=>{HWLIST=L||[];render()});render();return}
-    if(m.role==="student"&&d.group){loadGroup(d.group);const gid=ID_IN[m.gid]||m.gid;
-      S.who={g:gid,n:m.name};S.admin=false;S.role=m.plan==="oyente"?"oyente":"vivo";S.account.plan=S.role;S.tab="hoy";applyWho();
+    if(m.role==="student"&&d.group){loadGroup(d.group);const gid=ID_IN[m.gid]||m.gid;if(d.progreso)PROG[gid]=d.progreso;
+      S.who={g:gid,n:m.sname||m.name};S.admin=false;S.role=m.plan==="oyente"?"oyente":"vivo";S.account.plan=S.role;S.tab="hoy";applyWho();
       Object.entries(d.hw||{}).forEach(([iso,v])=>{HWA[hwKey(gid,m.name,iso)]=v});
       (d.avisos||[]).forEach(a=>S.avisos&&S.avisos.unshift&&S.avisos.unshift({t:a.text,at:a.at}));
       render();return}
