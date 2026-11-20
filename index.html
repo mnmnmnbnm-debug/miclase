@@ -504,7 +504,7 @@ i.pill{font-style:normal}
 .readbox{display:grid;gap:10px;padding:14px;border-radius:14px;background:var(--surface2)}.readko{font-size:20px;line-height:1.7;font-weight:700}.reades{font-size:14px;line-height:1.6;color:var(--ink2)}
 .tedit{border:1px dashed var(--line);border-radius:12px;padding:8px 10px;font-size:13px}.tedit summary{cursor:pointer;color:var(--ink2)}.tedit label{display:grid;gap:4px;margin:8px 0}
 .intro{display:none!important}.realbar{display:flex;gap:8px;align-items:center;justify-content:center;padding:40px 16px;flex-direction:column;text-align:center}
-.gcard.g-wk{background:color-mix(in srgb,var(--ok) 26%,var(--surface));border-color:color-mix(in srgb,var(--ok) 60%,transparent)}.gcard.g-sa{background:color-mix(in srgb,var(--warn) 26%,var(--surface));border-color:color-mix(in srgb,var(--warn) 60%,transparent)}.gcard.g-su{background:color-mix(in srgb,var(--b1) 26%,var(--surface));border-color:color-mix(in srgb,var(--b1) 60%,transparent)}.gcard.g-pv{background:color-mix(in srgb,var(--ink2) 14%,var(--surface))}.gcard .gstats span{background:color-mix(in srgb,var(--surface) 55%,transparent)}.strip .chip .cs{font-size:12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}.hwdue{margin:6px 0 10px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));font-size:14px}.hwdue.off{background:var(--surface2,#2a2a2a);color:var(--ink2)}.hwcom{margin-top:12px;padding:12px 14px;border-radius:12px;border:1.5px solid color-mix(in srgb,#8e7cc3 70%,transparent);background:color-mix(in srgb,#8e7cc3 12%,var(--surface))}.hwcom h4{margin:0 0 8px;color:#a996e0}.hwc{padding:6px 0;border-top:1px dashed var(--line)}.hwc-bad{text-decoration:line-through;opacity:.7}.hwc-fix{white-space:pre-wrap;color:var(--ok)}.hwc-ok{color:var(--ok)}.hwcom p{margin:8px 0 0;white-space:pre-wrap}</style>
+.gcard.g-wk{background:color-mix(in srgb,var(--ok) 26%,var(--surface));border-color:color-mix(in srgb,var(--ok) 60%,transparent)}.gcard.g-sa{background:color-mix(in srgb,var(--warn) 26%,var(--surface));border-color:color-mix(in srgb,var(--warn) 60%,transparent)}.gcard.g-su{background:color-mix(in srgb,var(--b1) 26%,var(--surface));border-color:color-mix(in srgb,var(--b1) 60%,transparent)}.gcard.g-pv{background:color-mix(in srgb,var(--ink2) 14%,var(--surface))}.gcard .gstats span{background:color-mix(in srgb,var(--surface) 55%,transparent)}.strip .chip .cs{font-size:12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}.hwdue{margin:6px 0 10px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));font-size:14px}.hwdue.off{background:var(--surface2,#2a2a2a);color:var(--ink2)}.hwcom{margin-top:12px;padding:12px 14px;border-radius:12px;border:1.5px solid color-mix(in srgb,#8e7cc3 70%,transparent);background:color-mix(in srgb,#8e7cc3 12%,var(--surface))}.hwcom h4{margin:0 0 8px;color:#a996e0}.hwc{padding:6px 0;border-top:1px dashed var(--line)}.hwc-bad{text-decoration:line-through;opacity:.7}.hwc-fix{white-space:pre-wrap;color:var(--ok)}.hwc-ok{color:var(--ok)}.hwcom p{margin:8px 0 0;white-space:pre-wrap}.pdfbox{margin-top:12px;display:flex;flex-direction:column;gap:10px;min-height:120px}.pdfbox .pdfpg{width:100%;height:auto;border-radius:6px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}.pdfbox .pdfv{width:100%;height:75vh;border:0;border-radius:8px;background:#fff}#pdfDl[aria-disabled]{opacity:.5;pointer-events:none}</style>
 
 <div class="wrap">
   <div class="intro">
@@ -908,6 +908,30 @@ function vClases(){
 }
 function back(){return `<button class="link" data-act="clsBack">← Clases</button>`}
 function vNotes(c){
+  if(!c.sg||!TOK)return vNotesDemo(c);
+  setTimeout(()=>loadNotesPdf(c),0);
+  return `<div class="row">${back()}</div>
+  <div class="card wide">
+    <div class="row"><div><span class="example" style="color:var(--accent-t)">Clase ${c.n} · ${c.date}</span><div class="ko big">${c.ko}</div><div class="muted">${c.es||""}</div></div>
+    <a class="btn" id="pdfDl" aria-disabled="true">${IC.dl} Descargar PDF</a></div>
+    <div id="pdfBox" class="pdfbox"><div class="muted">Cargando apuntes…</div></div>
+  </div>`;
+}
+const PDFB={};
+function pdfjs(){return window.pdfjsLib?Promise.resolve(window.pdfjsLib):new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";s.onload=()=>{window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";ok(window.pdfjsLib)};s.onerror=no;document.head.appendChild(s)})}
+async function loadNotesPdf(c){const k=c.sg+"|"+c.iso;
+  try{let e=PDFB[k];
+    if(!e){const d=await api("notesPdf",{g:c.sg,iso:c.iso});const bin=atob(d.b64),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);e=PDFB[k]={bytes:a,url:URL.createObjectURL(new Blob([a],{type:"application/pdf"}))}}
+    const dl=document.getElementById("pdfDl");if(dl){dl.href=e.url;dl.download=`Apuntes_Clase${c.n}_${c.iso}.pdf`;dl.removeAttribute("aria-disabled")}
+    const box=document.getElementById("pdfBox");if(!box||box.dataset.k===k)return;box.dataset.k=k;
+    let L=null;try{L=await pdfjs()}catch(x){}
+    if(!L){box.innerHTML=`<iframe class="pdfv" src="${e.url}#view=FitH" title="Apuntes"></iframe>`;return}
+    const doc=await L.getDocument({data:e.bytes.slice()}).promise;box.innerHTML="";
+    const W=box.clientWidth||700,dpr=Math.min(2,window.devicePixelRatio||1);
+    for(let p=1;p<=doc.numPages;p++){if(!document.body.contains(box))return;const pg=await doc.getPage(p),v0=pg.getViewport({scale:1}),v=pg.getViewport({scale:W/v0.width*dpr});
+      const cv=document.createElement("canvas");cv.width=v.width;cv.height=v.height;cv.className="pdfpg";box.appendChild(cv);await pg.render({canvasContext:cv.getContext("2d"),viewport:v}).promise}}
+  catch(err){console.error(err);const box=document.getElementById("pdfBox");if(box)box.innerHTML=`<div class="muted">No se pudieron cargar los apuntes. Intenta de nuevo en un momento.</div>`}}
+function vNotesDemo(c){
   return `<div class="row">${back()}<span class="example">Ejemplo</span></div>
   <div class="card wide">
     <div class="row"><div><span class="example" style="color:var(--accent-t)">Clase ${c.n} · ${c.date}</span><div class="ko big">${c.ko}</div><div class="muted">${c.es}</div></div>
@@ -1941,7 +1965,7 @@ function loadGroup(g){
   const id=ID_IN[g.id]||g.id;
   const dur=/^(sab|dom)/.test(id)&&id!=="dom9"?"2:00:00":"1:00:00";
   const QQ=(window.__QA||{})[g.id]||{};
-  REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur},QQ[c.iso]?{qa:QQ[c.iso]}:{}));
+  REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur,sg:g.id},QQ[c.iso]?{qa:QQ[c.iso]}:{}));
   ATTD[id]=g.att||{};HWD[id]=g.hw||{};RECS[id]=g.recs||{};
   const gr=GRP.find(x=>x.id===id);if(gr&&g.students)gr.st=g.students.slice();
   STAT[id]={};(g.students||[]).forEach(n=>{let p=0,t=0;Object.values(g.att||{}).forEach(a=>{if(a[n]){t++;if(a[n]==="P")p++}});STAT[id][n]=[p,t]});
