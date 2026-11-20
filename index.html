@@ -504,7 +504,7 @@ i.pill{font-style:normal}
 .readbox{display:grid;gap:10px;padding:14px;border-radius:14px;background:var(--surface2)}.readko{font-size:20px;line-height:1.7;font-weight:700}.reades{font-size:14px;line-height:1.6;color:var(--ink2)}
 .tedit{border:1px dashed var(--line);border-radius:12px;padding:8px 10px;font-size:13px}.tedit summary{cursor:pointer;color:var(--ink2)}.tedit label{display:grid;gap:4px;margin:8px 0}
 .intro{display:none!important}.realbar{display:flex;gap:8px;align-items:center;justify-content:center;padding:40px 16px;flex-direction:column;text-align:center}
-.strip .chip .cs{font-size:12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}</style>
+.gcard.g-wk{background:color-mix(in srgb,var(--ok) 26%,var(--surface));border-color:color-mix(in srgb,var(--ok) 60%,transparent)}.gcard.g-sa{background:color-mix(in srgb,var(--warn) 26%,var(--surface));border-color:color-mix(in srgb,var(--warn) 60%,transparent)}.gcard.g-su{background:color-mix(in srgb,var(--b1) 26%,var(--surface));border-color:color-mix(in srgb,var(--b1) 60%,transparent)}.gcard.g-pv{background:color-mix(in srgb,var(--ink2) 14%,var(--surface))}.gcard .gstats span{background:color-mix(in srgb,var(--surface) 55%,transparent)}.strip .chip .cs{font-size:12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}</style>
 
 <div class="wrap">
   <div class="intro">
@@ -1401,7 +1401,7 @@ function vStudents(){
     const att=avgOf(L,"att"),qzv=avgOf(L,"quiz"),qz=qzv==null?"—":qzv.toFixed(1);
     const hw=fmtP(avgOf(L,"hw"));
     const pay=L.filter(x=>x.pay!=="ok").length,r=L.filter(risk).length,v=L.filter(x=>x.plan==="vivo").length;
-    return `<button class="card gcard" data-act="grpOpen" data-g="${esc(g)}">
+    return `<button class="card gcard g-${{"주중":"wk","토":"sa","일":"su"}[m.lv]||"pv"}" data-act="grpOpen" data-g="${esc(g)}">
       <div class="row"><b class="gname">${g}</b><i class="pill ${LVC[m.lv]||"p-gray"}">${m.lv}</i></div>
       <div class="muted">${m.when} · 지금 Clase ${m.cur}/${m.tot} · <span class="ko">${m.topic}</span></div>
       <div class="meter"><i style="width:${m.cur/m.tot*100}%"></i></div>
