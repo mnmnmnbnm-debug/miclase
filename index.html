@@ -1987,19 +1987,21 @@ function applyTeacher(d){
 }
 function setToken(cred){
   try{const p=JSON.parse(atob(cred.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));localStorage.setItem("mc_tok",JSON.stringify({v:cred,exp:p.exp*1000}))}catch(e){}
-  TOK=cred;start();
+  TOK=cred;try{localStorage.setItem("mc_was","1")}catch(e){}start();
 }
 function loginBox(msg){
   $("#screen").innerHTML=`<div class="realbar"><div class="big">¡Hola! 👋</div><div>${msg||"Entra con tu cuenta de Google para ver tus clases."}</div><div id="gbtn"></div><button class="btn sm alt" data-act="asGuest">Seguir sin cuenta</button></div>`;
   const draw=()=>{if(!(window.google&&google.accounts&&google.accounts.id))return setTimeout(draw,300);
     google.accounts.id.initialize({client_id:CID,callback:r=>setToken(r.credential),auto_select:true});
-    google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large",text:"continue_with",locale:"es"})};
+    google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large",text:"continue_with",locale:"es"});try{google.accounts.id.prompt()}catch(e){}};
   draw();
 }
-function logout(){try{localStorage.removeItem("mc_tok")}catch(e){}TOK=null;ME=null;try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload()}
+function logout(){try{localStorage.removeItem("mc_tok");localStorage.removeItem("mc_was")}catch(e){}TOK=null;ME=null;try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload()}
 function start(){
   if(!API||!CID){$("#screen").innerHTML=`<div class="realbar"><b>Falta configurar la app</b><div class="muted">Pon API_URL y CLIENT_ID en config.js</div></div>`;return}
-  if(!TOK){S.role="guest";S.gs="anon";S.tab=S.tab||"hoy";render();return}
+  if(!TOK){let was=false;try{was=localStorage.getItem("mc_was")==="1"}catch(e){}
+    if(was){loginBox("Volviendo a entrar con tu cuenta de Google…");return}
+    S.role="guest";S.gs="anon";S.tab=S.tab||"hoy";render();return}
   $("#screen").innerHTML=`<div class="realbar"><div class="muted">Cargando tus clases…</div></div>`;
   api("data").then(d=>{
     const m=ME||{};
