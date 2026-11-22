@@ -532,10 +532,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 #shell table{display:block;max-width:100%;overflow-x:auto}
 #shell pre{white-space:pre-wrap}
 /* ===== Vista por dispositivo (solo profesor) ===== */
-.devpick{position:fixed;z-index:40;top:calc(54px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:4px;padding:4px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.devpick{position:fixed;z-index:40;top:calc(54px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:grid;gap:4px;padding:5px;border-radius:18px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .devpick button{border:0;background:transparent;color:var(--ink);border-radius:999px;padding:5px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .devpick button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.devpick[hidden]{display:none}.devpick .sep{width:1px;background:var(--line);margin:2px 2px}
+.devpick[hidden]{display:none}.devpick .dprow{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.devpick .dprow+.dprow{border-top:1px solid var(--line);padding-top:4px}
 .ncell .lvmore{white-space:normal;max-width:100%}
 @media (max-width:700px){.skinpick{top:auto;bottom:calc(84px + env(safe-area-inset-bottom,0px));padding:4px;gap:4px}.skinpick button{width:20px;height:20px}.bar .wm span{font-size:12.5px}}
 .devov{position:fixed;inset:0;z-index:39;background:color-mix(in srgb,var(--bg) 70%,#000);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:100px 16px 24px}
@@ -853,7 +853,7 @@ function vHoy(){
     <button class="btn block" style="background:var(--on-stage);color:var(--stage)" data-act="enter" ${G().todayIsClass?"":"disabled"}>${!G().todayIsClass?"Se activa 5 min antes de la clase":live()?"Entrar a clase":"Ver clase en vivo"}</button>
     ${a?`<div style="font-size:12.5px;opacity:.85">✓ Asistencia registrada a las ${a.time} · ${a.status}</div>`:`<div style="font-size:12px;opacity:.7">Tu asistencia se registra sola al entrar.</div>`}
   </div>
-  ${(()=>{const c=CLASSES.find(x=>x.words&&x.words.length);if(!c)return"";const ws=c.words.slice(0,16);
+  ${(()=>{const c=CLASSES.find(x=>x.words&&x.words.length);if(!c)return"";const ws=c.words;
     return `<div class="card span2"><div class="row"><h3>Palabras de la clase · Clase ${c.n}</h3><span class="muted ko">${esc(c.ko||"")}</span></div>
       <div class="hwords">${ws.map(w=>`<button class="hword" data-act="sayk" data-w="${esc(w[0])}"><b class="ko">${esc(w[0])}</b><span>${esc(w[2]||w[1]||"")}</span></button>`).join("")}</div>
       <button class="btn block quizbig" data-act="hoyQuiz" data-n="${c.n}">${S.hoyQuiz?"Cerrar el quiz":"Hacer el quiz de estas palabras"}</button>
@@ -2076,8 +2076,8 @@ function flushAns(){const L=Object.values(AQ);Object.keys(AQ).forEach(k=>delete 
 function loadGroup(g){
   const id=ID_IN[g.id]||g.id;
   const dur=/^(sab|dom)/.test(id)&&id!=="dom9"?"2:00:00":"1:00:00";
-  const QQ=(window.__QA||{})[g.id]||{};
-  REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur,sg:g.id},QQ[c.iso]?{qa:QQ[c.iso]}:{}));
+  const QQ=(window.__QA||{})[g.id]||{},PW=(window.__PW||{})[g.id]||{};
+  REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur,sg:g.id},QQ[c.iso]?{qa:QQ[c.iso]}:{},PW[c.iso]&&PW[c.iso].length?{words:PW[c.iso]}:{}));
   ATTD[id]=g.att||{};HWD[id]=g.hw||{};RECS[id]=g.recs||{};
   const gr=GRP.find(x=>x.id===id);if(gr&&g.students)gr.st=g.students.slice();
   STAT[id]={};(g.students||[]).forEach(n=>{let p=0,t=0;Object.values(g.att||{}).forEach(a=>{if(a[n]){t++;if(a[n]==="P")p++}});STAT[id][n]=[p,t]});
@@ -2140,10 +2140,11 @@ function start(){
   $("#screen").innerHTML=`<div class="realbar"><div class="muted">Cargando tus clases…</div></div>`;
   api("data").then(d=>{
     const m=ME||{};
-    if(m.role==="teacher"){window.__QA=d.preguntas||{};Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
+    if(m.role==="teacher"){window.__QA=d.preguntas||{};window.__PW=d.palabras||{};Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
       const first=GRP.find(g=>g.st&&g.st.length)||GRP[0];S.who={g:first.id,n:first.st[0]||""};applyWho();
+      if(/[?&]as=student/.test(location.search)){S.admin=true;S.role="vivo";S.account.plan="vivo";S.tab="hoy";S.inClass=false;applyWho()}
       api("hwList").then(L=>{HWLIST=L||[];render()});render();return}
-    if(m.role==="student"&&d.group){window.__QA={[d.group.id]:d.preguntas||{}};window.__CERTS=d.certs||[];loadGroup(d.group);const gid=ID_IN[m.gid]||m.gid;if(d.progreso)PROG[gid]=d.progreso;
+    if(m.role==="student"&&d.group){window.__QA={[d.group.id]:d.preguntas||{}};window.__PW={[d.group.id]:d.palabras||{}};window.__CERTS=d.certs||[];loadGroup(d.group);const gid=ID_IN[m.gid]||m.gid;if(d.progreso)PROG[gid]=d.progreso;
       S.who={g:gid,n:m.sname||m.name};S.admin=false;S.role=m.plan==="oyente"?"oyente":"vivo";S.account.plan=S.role;S.tab="hoy";applyWho();
       Object.entries(d.hw||{}).forEach(([iso,v])=>{HWA[hwKey(gid,m.name,iso)]=v});
       (d.avisos||[]).forEach(a=>S.avisos&&S.avisos.unshift&&S.avisos.unshift({t:a.text,at:a.at}));
@@ -2184,11 +2185,15 @@ render=function(){
 
 /* ===== Temas: el alumno elige (se guarda en la hoja Temas); invitados ven el más elegido ===== */
 const SKN={hanji:"Hanji",tinta:"Tinta",bermellon:"Bermellón"};
-function setSkin(k){if(!SKN[k])k="hanji";document.documentElement.dataset.skin=k;document.querySelectorAll(".skinpick button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===k));try{localStorage.setItem("mc_skin",k)}catch(e){}}
+function setSkin(k){if(!SKN[k])k="hanji";document.documentElement.dataset.skin=k;document.querySelectorAll(".skinpick button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===k));try{localStorage.setItem("mc_skin",k)}catch(e){}
+  document.querySelectorAll(".devov iframe").forEach(f=>{try{f.contentWindow.setSkin(k)}catch(e){}})}
+const FRAMED=(()=>{try{return window.top!==window.self&&!!parent.document.documentElement.dataset.skin}catch(e){return false}})();
+const parentSkin=()=>{try{return parent.document.documentElement.dataset.skin}catch(e){return ""}};
 try{setSkin(localStorage.getItem("mc_skin")||"hanji")}catch(e){setSkin("hanji")}
+if(FRAMED)setSkin(parentSkin());
 let SKIN_TOP="hanji";
 function isStu(){return !!TOK&&(S.role==="vivo"||S.role==="oyente")&&ME&&ME.role==="student"}
-function loadSkins(){api("temas").then(d=>{if(!d)return;SKIN_TOP=d.top||"hanji";setSkin(isStu()&&d.mine?d.mine:(S.role==="prof"?(document.documentElement.dataset.skin||SKIN_TOP):SKIN_TOP))}).catch(()=>{})}
+function loadSkins(){if(FRAMED){setSkin(parentSkin());return}api("temas").then(d=>{if(!d)return;SKIN_TOP=d.top||"hanji";setSkin(isStu()&&d.mine?d.mine:(S.role==="prof"?(document.documentElement.dataset.skin||SKIN_TOP):SKIN_TOP))}).catch(()=>{})}
 document.addEventListener("click",e=>{const b=e.target.closest(".skinpick button");if(!b)return;e.stopImmediatePropagation();const k=b.dataset.s;setSkin(k);
   if(isStu()){api("tema",{s:k}).then(d=>{if(d)SKIN_TOP=d.top;toast("¡Listo! Tu tema: "+SKN[k])}).catch(()=>toast("No se pudo guardar tu tema. Revisa tu conexión."))}
 },true);
@@ -2199,14 +2204,14 @@ start();
 /* ===== Vista previa (solo profesor): dispositivo + modo invitado ===== */
 (function(){if(window.top!==window.self)return;const D={m:[390,844,"휴대폰 390×844"],t:[820,1180,"태블릿 820×1180"]};
   const box=document.createElement("div");box.className="devpick";box.hidden=true;box.setAttribute("role","group");box.setAttribute("aria-label","미리보기");
-  box.innerHTML='<button type="button" data-d="m">📱 휴대폰</button><button type="button" data-d="t">태블릿</button><button type="button" data-d="d">PC</button><span class="sep"></span><button type="button" data-v="prof">선생님</button><button type="button" data-v="guest">Invitado</button>';document.body.appendChild(box);
+  box.innerHTML='<div class="dprow"><button type="button" data-d="m">휴대폰</button><button type="button" data-d="t">태블릿</button><button type="button" data-d="d">PC</button></div><div class="dprow"><button type="button" data-v="prof">선생님</button><button type="button" data-v="stu">학생</button><button type="button" data-v="guest">Invitado</button></div>';document.body.appendChild(box);
   let dev="d",view="prof",ov=null;
   const draw=()=>{box.querySelectorAll("[data-d]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.d===dev));box.querySelectorAll("[data-v]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===view));
     if(ov){ov.remove();ov=null}if(dev==="d"&&view==="prof")return;
-    const base=location.href.split("#")[0].split("?")[0]+(view==="guest"?"?as=guest":"");
+    const base=location.href.split("#")[0].split("?")[0]+(view==="guest"?"?as=guest":view==="stu"?"?as=student":"");
     let w,h,cap;if(dev==="d"){w=Math.min(1280,window.innerWidth-40);h=window.innerHeight-130;cap="PC"}else{[w,h,cap]=D[dev]}
     const sc=dev==="d"?1:Math.min(1,(window.innerHeight-130)/(h+24));ov=document.createElement("div");ov.className="devov";
-    ov.innerHTML='<div class="cap">'+cap+' · '+(view==="guest"?"Invitado 화면":"선생님 화면")+' · 미리보기</div><div class="frame" style="transform:scale('+sc+');transform-origin:top center;margin-bottom:'+(-(h+24)*(1-sc))+'px"><iframe src="'+base+'" style="width:'+w+'px;height:'+h+'px" title="'+cap+'"></iframe></div>';document.body.appendChild(ov)};
+    ov.innerHTML='<div class="cap">'+cap+' · '+(view==="guest"?"Invitado 화면":view==="stu"?"학생 화면":"선생님 화면")+' · 미리보기</div><div class="frame" style="transform:scale('+sc+');transform-origin:top center;margin-bottom:'+(-(h+24)*(1-sc))+'px"><iframe src="'+base+'" style="width:'+w+'px;height:'+h+'px" title="'+cap+'"></iframe></div>';document.body.appendChild(ov)};
   box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.d)dev=b.dataset.d;if(b.dataset.v)view=b.dataset.v;draw()});
   draw();setInterval(()=>{const prof=typeof S!=="undefined"&&S&&S.role==="prof";box.hidden=!prof;if(!prof&&ov){dev="d";view="prof";draw()}},1000)})();
 </script>
