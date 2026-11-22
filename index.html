@@ -510,11 +510,10 @@ i.pill{font-style:normal}
   --bg:#141312; --surface:#1f1d1b; --surface2:#2a2724; --line:#38342f;
   --ink:#f5f1ea; --ink2:#bdb3a7; --accent:#ff6a52; --accent-t:#ff7d68;
   --ok:#5cc394; --warn:#e0b25a; --b1:#86a8ff; --b2:#c39bf0; --stage:#0c0b0a; --on-stage:#f5f1ea; --stage2:#24221f; color-scheme:dark}
-:root:root[data-skin="bermellon"]{
-  --bg:#fbeee9; --surface:#ffffff; --surface2:#f6ddd4; --line:#eccdc2;
-  --ink:#1b1b1b; --ink2:#5e4a43; --accent:#e5452f; --accent-t:#b8311c;
-  --ok:#27704f; --warn:#85590c; --b1:#2a5db0; --b2:#6b3fa0; --stage:#e5452f; --on-stage:#1b1b1b; --stage2:#c93a26; color-scheme:light}
+:root:root[data-skin="bermellon"]{--bg:#b8311c;--surface:#fff7f2;--surface2:#fde0d4;--line:#f2bfae;--ink:#2a0f08;--ink2:#6e3a2c;--accent:#b8311c;--accent-t:#9c2614;--ok:#1f6a46;--warn:#7a5208;--b1:#2a5db0;--b2:#6b3fa0;--stage:#2a0f08;--on-stage:#fff7f2;--stage2:#4a1a10;color-scheme:light}
 :root:root[data-skin="hanji"]{--bg:#f5f1ea;--surface:#ffffff;--surface2:#ebe4d8;--line:#e3dbcf;--ink:#1b1b1b;--ink2:#5c554d;--accent:#e5452f;--accent-t:#c0341f;--ok:#27704f;--warn:#85590c;--b1:#2a5db0;--b2:#6b3fa0;--stage:#1b1b1b;--on-stage:#f5f1ea;--stage2:#2b2926;color-scheme:light}
+:root[data-skin="bermellon"] .btn,:root[data-skin="bermellon"] .chip.cur,:root[data-skin="bermellon"] .chip.cur b,:root[data-skin="bermellon"] .day.cur,:root[data-skin="bermellon"] .gflash.on,:root[data-skin="bermellon"] .gflash.on span,:root[data-skin="bermellon"] .gpill,:root[data-skin="bermellon"] .hjc[aria-pressed="true"],:root[data-skin="bermellon"] .mday.now,:root[data-skin="bermellon"] .pick button[aria-pressed="true"],:root[data-skin="bermellon"] .roles button[aria-pressed="true"],:root[data-skin="bermellon"] .seg button[aria-pressed="true"],:root[data-skin="bermellon"] .toast,:root[data-skin="bermellon"] .wb.today,:root[data-skin="bermellon"] .wcol.now .wh b,:root[data-skin="bermellon"] .wcol.now .wh span{color:#fff7f2}
+:root[data-skin="bermellon"] .btn.alt{color:var(--ink)}
 .skinpick{position:fixed;z-index:40;top:calc(10px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .skinpick button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);padding:0}
 .skinpick button[data-s="hanji"]{background:#f5f1ea}.skinpick button[data-s="tinta"]{background:#1b1b1b}.skinpick button[data-s="bermellon"]{background:#e5452f}
@@ -1563,10 +1562,10 @@ function vGHoy(){
     ${[["Ver la clase de muestra",GT.open],["Repasar las tarjetas de hangul",GT.card>0],["Hacer el mini quiz",GT.done],["Leer el diario de hoy (12 líneas)",DIARY.every((x,i)=>(GT.dy||DYS())[i])],["Leer en voz alta el 애국가",!!GT.read]].map(([t,on])=>`<div class="check"><span class="box ${on?"on":""}">${on?"✓":""}</span>${t}</div>`).join("")}
   </div></div>
   <div class="card"><h3>Así aprendemos en ¡Sí se puede coreano!</h3><div class="list">
-    <div class="li"><span>🎥</span><div>Clases en vivo desde Seúl, en español</div></div>
-    <div class="li"><span>📄</span><div>Notas del profesor y grabación de cada clase</div></div>
-    <div class="li"><span>🃏</span><div>Tarjetas y quizzes hechos con lo que vimos en clase</div></div>
-    <div class="li"><span>✍️</span><div>Tareas con corrección (Plan En vivo)</div></div>
+    <div class="li"><div>Clases en vivo desde Seúl, en español</div></div>
+    <div class="li"><div>Notas del profesor y grabación de cada clase</div></div>
+    <div class="li"><div>Tarjetas y quizzes hechos con lo que vimos en clase</div></div>
+    <div class="li"><div>Tareas con corrección (Plan En vivo)</div></div>
   </div></div>
   ${gUp()}`;
 }
