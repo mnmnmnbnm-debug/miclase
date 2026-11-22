@@ -330,7 +330,7 @@ i.pill{font-style:normal}
 .pslot.booked{border:0;background:var(--b2);color:var(--surface);display:grid;align-content:center;justify-items:center;line-height:1.15;overflow:hidden}
 .pslot.booked span{font-size:12px;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @container app (min-width: 700px){.psets{grid-template-columns:1fr 1fr 1.4fr}.psets .pk{grid-column:auto}}
-.acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .act{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;text-align:center;min-width:0;width:100%}
 .act svg{display:block;width:24px;height:24px;margin:0 auto 2px;color:var(--accent-t);flex:none}
 .act{height:96px}
@@ -515,7 +515,7 @@ i.pill{font-style:normal}
 :root[data-skin="bermellon"] .btn,:root[data-skin="bermellon"] .chip.cur,:root[data-skin="bermellon"] .chip.cur b,:root[data-skin="bermellon"] .day.cur,:root[data-skin="bermellon"] .gflash.on,:root[data-skin="bermellon"] .gflash.on span,:root[data-skin="bermellon"] .gpill,:root[data-skin="bermellon"] .hjc[aria-pressed="true"],:root[data-skin="bermellon"] .mday.now,:root[data-skin="bermellon"] .pick button[aria-pressed="true"],:root[data-skin="bermellon"] .roles button[aria-pressed="true"],:root[data-skin="bermellon"] .seg button[aria-pressed="true"],:root[data-skin="bermellon"] .toast,:root[data-skin="bermellon"] .wb.today,:root[data-skin="bermellon"] .wcol.now .wh b,:root[data-skin="bermellon"] .wcol.now .wh span{color:#fff7f2}
 :root[data-skin="bermellon"] .btn.alt{color:var(--ink)}
 .bar .wm{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}.bar .wm span{margin-top:0;font-size:15px}
-.hwords{display:flex;flex-wrap:wrap;gap:6px}.hword{display:grid;gap:1px;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:6px 10px;font:inherit;cursor:pointer;max-width:100%}.hword b{font-size:16px}.hword span{font-size:12px;color:var(--ink2)}.hihead{display:flex;align-items:center;gap:10px}.mepic{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--line)}.wtools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 8px}.wtools .chip{cursor:pointer}.wstar-n{color:#e0a100;font-weight:700;font-size:12.5px}.wlist{display:grid;gap:6px}.wrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}.wrow button{font:inherit;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;min-height:42px;overflow-wrap:anywhere}.wrow .wko{font-weight:700;font-size:16px}.wrow .wes{font-size:13.5px;color:var(--ink2)}.wrow button.hid{color:var(--ink2);font-weight:400;font-size:12.5px;border-style:dashed;background:transparent}.wrow.bad button{border-color:#e0a100;background:color-mix(in srgb,#e0a100 14%,var(--surface2))}.wstar{color:#e0a100;font-style:normal;margin-right:4px}.quizbig{font-size:17px;padding:16px 18px;margin-top:6px}.qbar{height:6px;border-radius:6px;background:var(--surface2);overflow:hidden;margin:4px 0 10px}.qbar i{display:block;height:100%;background:var(--accent);transition:width .3s}.qbig{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:30px;font-weight:700;margin:10px 0 6px;color:var(--ink)}.qz .opts{margin-top:8px}.qq .qqlisten{display:flex;align-items:center;justify-content:center;gap:8px}.qqmic{margin:10px 0}.quizbig svg{width:20px;height:20px;vertical-align:-4px}.qqsay{text-align:center;border:2px dashed var(--line);border-radius:14px;color:var(--ink2)}.quizbig.rec{background:#c62828;color:#fff}.qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
+.hwords{display:flex;flex-wrap:wrap;gap:6px}.hword{display:grid;gap:1px;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:6px 10px;font:inherit;cursor:pointer;max-width:100%}.hword b{font-size:16px}.hword span{font-size:12px;color:var(--ink2)}.hihead{display:flex;align-items:center;gap:10px}.mepic{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--line)}.wtools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 6px}.whbtn{font:inherit;font-size:13px;font-weight:600;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.whbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg)}.wstar-n{color:#e0a100;font-weight:700;font-size:12.5px;margin:0 0 6px}.wlist{display:grid;gap:6px}.wrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}.wrow button{font:inherit;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;min-height:42px;overflow-wrap:anywhere}.wrow .wko{font-weight:700;font-size:16px}.wrow .wes{font-size:13.5px;color:var(--ink2)}.wrow button.hid{color:var(--ink2);font-weight:400;font-size:12.5px;border-style:dashed;background:transparent}.wrow.bad button{border-color:#e0a100;background:color-mix(in srgb,#e0a100 14%,var(--surface2))}.wstar{color:#e0a100;font-style:normal;margin-right:4px}.quizbig{font-size:17px;padding:16px 18px;margin-top:6px}.qbar{height:6px;border-radius:6px;background:var(--surface2);overflow:hidden;margin:4px 0 10px}.qbar i{display:block;height:100%;background:var(--accent);transition:width .3s}.qbig{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:30px;font-weight:700;margin:10px 0 6px;color:var(--ink)}.qz .opts{margin-top:8px}.qq .qqlisten{display:flex;align-items:center;justify-content:center;gap:8px}.qqmic{margin:10px 0}.quizbig svg{width:20px;height:20px;vertical-align:-4px}.qqsay{text-align:center;border:2px dashed var(--line);border-radius:14px;color:var(--ink2)}.quizbig.rec{background:#c62828;color:#fff}.qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
 .skinpick{position:fixed;z-index:40;top:calc(10px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .skinpick button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);padding:0}
 .skinpick button[data-s="hanji"]{background:#f5f1ea}.skinpick button[data-s="tinta"]{background:#1b1b1b}.skinpick button[data-s="bermellon"]{background:#e5452f}
@@ -786,11 +786,12 @@ function say(text,rate){const n=++sayN;
   sayWeb(text);
 }
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function m1(t){return String(t||"").split(/\s+\/\s+|,\s+|;\s*/)[0].trim()}
 function makeQuiz(words,n){
   const pool=words.filter(w=>w[0]&&w[2]);
   return shuffle(pool).slice(0,Math.min(n,pool.length)).map(w=>{
-    const others=shuffle(pool.filter(x=>x!==w)).slice(0,3).map(x=>x[2]);
-    return {k:w[0],ans:w[2],opts:shuffle([w[2],...others])};
+    const a=m1(w[2]),others=shuffle(pool.filter(x=>x!==w&&m1(x[2])!==a)).slice(0,3).map(x=>m1(x[2]));
+    return {k:w[0],ans:a,opts:shuffle([a,...others])};
   });
 }
 S.quiz=makeQuiz(VOCAB,5);
@@ -857,14 +858,14 @@ function vHoy(){
     const head=`<div class="row"><h3>Palabras de la clase · Clase ${c.n}</h3><span class="muted ko">${esc(c.ko||"")}</span></div>`;
     if(S.hoyQuiz)return `<div class="card span2">${head}<button class="btn alt block" data-act="hoyQuiz" data-n="${c.n}">← Volver a la lista de palabras</button>${quizBody(c)}</div>`;
     return `<div class="card span2">${head}
-      <div class="wtools"><button class="chip" data-act="wHide" data-k="ko" aria-pressed="${!!S.hideKo}">${S.hideKo?"Mostrar coreano":"Ocultar coreano"}</button><button class="chip" data-act="wHide" data-k="es" aria-pressed="${!!S.hideEs}">${S.hideEs?"Mostrar español":"Ocultar español"}</button>${W.size?`<span class="muted wstar-n">★ ${W.size} por repasar</span>`:""}</div>
+      <div class="wtools"><button class="whbtn" data-act="wHide" data-k="ko" aria-pressed="${!!S.hideKo}">${S.hideKo?"Mostrar coreano":"Ocultar coreano"}</button><button class="whbtn" data-act="wHide" data-k="es" aria-pressed="${!!S.hideEs}">${S.hideEs?"Mostrar español":"Ocultar español"}</button></div>${W.size?`<div class="wstar-n">★ ${W.size} por repasar</div>`:""}
       <div class="wlist">${ws.map((w,i)=>{const bad=W.has(w[0]),hk=S.hideKo&&!rv.has("k"+i),he=S.hideEs&&!rv.has("e"+i);
-        return `<div class="wrow${bad?" bad":""}"><button class="wko ko${hk?" hid":""}" data-act="${hk?"wRev":"sayk"}" data-i="k${i}" data-w="${esc(w[0])}">${bad?'<i class="wstar">★</i>':""}${hk?"Toca para ver":esc(w[0])}</button><button class="wes${he?" hid":""}" data-act="wRev" data-i="e${i}">${he?"Toca para ver":esc(w[2]||w[1]||"")}</button></div>`}).join("")}</div>
-      <button class="btn block quizbig" data-act="hoyQuiz" data-n="${c.n}">Hacer el quiz de estas palabras</button></div>`})()}
+        return `<div class="wrow${bad?" bad":""}"><button class="wko ko${hk?" hid":""}" data-act="${S.hideKo?"wRev":"sayk"}" data-i="k${i}" data-w="${esc(w[0])}">${bad?'<i class="wstar">★</i>':""}${hk?"Toca para ver":esc(w[0])}</button><button class="wes${he?" hid":""}" data-act="wRev" data-i="e${i}">${he?"Toca para ver":esc(m1(w[2]||w[1]||""))}</button></div>`}).join("")}</div>
+      <button class="btn block quizbig" data-act="hoyQuiz" data-n="${c.n}">Empezar quiz · ${ws.length} palabras</button></div>`})()}
   <div class="card">
     <h3>Esta semana</h3>
     <div class="stack">
-      ${[["Repasar 10 palabras",S.card>0],["Quiz semanal (vence viernes 23:59)",S.quizDone],live()?["Tarea: "+(CLASSES[0]&&CLASSES[0].tarea!=="Sin tarea registrada"?CLASSES[0].tarea:"la de tu última clase"),S.hw.status!=="pendiente"]:null,["Ver las notas de la última clase",true]].filter(Boolean).map(([t,on])=>`<div class="check"><span class="box ${on?"on":""}">${on?"✓":""}</span>${t}</div>`).join("")}
+      ${semanaItems().map(([t,on])=>`<div class="check"><span class="box ${on?"on":""}">${on?"✓":""}</span>${t}</div>`).join("")}
     </div>
   </div>
   <div class="card">
@@ -940,18 +941,18 @@ function vClases(){
   if(v){const c=CLASSES.find(x=>x.n===v.n);return v.mode==="notes"?vNotes(c):v.mode==="video"?vVideo(c):vVocab(c)}
   if(S.allWords)return vAllWords();
   const all=CLASSES.flatMap(c=>c.words), kn=all.filter(w=>KNOWN.has(w[0])).length;
-  return `<div class="row"><h2>Clases</h2><button class="btn sm alt" data-act="allWords">${IC.book} Mis palabras · ${kn}/${all.length}</button></div>
-  ${CLASSES.length?"":`<div class="card span2"><b>Las clases de tu grupo aparecerán aquí</b><div class="muted">Después de cada clase verás tus apuntes, la grabación y las palabras.</div><div class="example">시안: 실제 수업 기록은 아직 Intensivo 10:00 반만 연결했어요</div></div>`}${CLASSES.map(c=>{const rc=recOf(c),none=rc==="none",exp=rc==="expired",pend=rc==="pending";return `<div class="card cls">
-    <div class="row"><span class="example" style="color:var(--accent-t)">Clase ${c.n}</span><span class="muted">${c.date}</span></div>
+  return `<div class="row"><h2>Clases</h2></div>
+  ${CLASSES.length?"":`<div class="card span2"><b>Las clases de tu grupo aparecerán aquí</b><div class="muted">Después de cada clase verás tus apuntes y la grabación.</div><div class="example">시안: 실제 수업 기록은 아직 Intensivo 10:00 반만 연결했어요</div></div>`}${CLASSES.map(c=>{const rc=recOf(c),none=rc==="none",exp=rc==="expired",pend=rc==="pending";return `<div class="card cls">
+    <div class="row"><span class="example" style="color:var(--accent-t);font-size:17px;letter-spacing:.02em">Clase ${c.n}</span><span style="font-size:17px;font-weight:800;color:var(--ink)">${c.date}</span></div>
     <div><div class="ko" style="font-weight:900;font-size:19px">${c.ko}</div><div class="muted">${c.es}</div></div>
     <div class="acts">
       <button class="act" data-act="open" data-n="${c.n}" data-m="notes">${IC.doc}<b>Apuntes</b><span>PDF</span></button>
       <button class="act" data-act="open" data-n="${c.n}" data-m="video" ${exp||pend||none?"disabled":""}>${IC.play}<b>Video</b><span>${none?"Sin video":pend?"En ~2 h":exp?"Vencido":c.dur}</span></button>
-      <button class="act" data-act="open" data-n="${c.n}" data-m="vocab">${IC.book}<b>Palabras</b><span>${c.words.filter(w=>KNOWN.has(w[0])).length} de ${c.words.length}</span></button>
+      
     </div>
     <div class="muted" style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Video: ${none?"esta clase no tiene grabación":pend?"listo ~2 h después de clase":exp?"ya no está disponible (7 días)":rc==="Último día"?"último día para verlo":"disponible "+rc}</div>
   </div>`}).join("")}
-  <div class="note">Las grabaciones se pueden ver durante todo el periodo. Apuntes y vocabulario se quedan siempre.</div>`;
+  <div class="note">Las grabaciones se pueden ver durante todo el periodo. Los apuntes se quedan siempre.</div>`;
 }
 function back(){return `<button class="link" data-act="clsBack">← Clases</button>`}
 function vNotes(c){
@@ -1079,6 +1080,15 @@ async function makePdf(c){
 }
 const QA={};
 const PC=()=>CLASSES.find(c=>c.n===S.pcls)||CLASSES[0];
+function semanaItems(){const out=[],c=CLASSES.find(x=>x.words&&x.words.length),cl=CLASSES[0];
+  if(c){const key=(c.sg||"")+"|"+(c.iso||c.n),done=!!lsGet("mc_qdone",{})[key],W=wrongSet(c);
+    out.push([`Quiz de las palabras · Clase ${c.n}`,done]);
+    if(done&&W.size)out.push([`Repasar ★ ${W.size} palabra${W.size>1?"s":""} que fallaste`,false]);}
+  if(cl&&live()){const hb=((HWD[ANA.gid]||{})[cl.iso])||null;
+    if(hb&&hb.length){const R=HWA[hwKey(ANA.gid,ANA.name,cl.iso)]||{st:"pendiente"},due=(hb[0]||{}).due;
+      out.push([`Tarea · Clase ${cl.n}${due?` · antes del ${DUEF.format(new Date(Date.parse(due)))}`:""}`,R.st!=="pendiente"]);}}
+  const wn=(lsGet(QWK_K,{})[weekId()]||0);out.push([`Practicar preguntas · ${Math.min(wn,3)} de 3`,wn>=3]);
+  return out}
 const WRONG_K="mc_wrong";
 function wrongSet(c){const o=lsGet(WRONG_K,{});return new Set(o[(c.sg||"")+"|"+(c.iso||c.n)]||[])}
 function wrongSave(c,bad,ok){const o=lsGet(WRONG_K,{}),k=(c.sg||"")+"|"+(c.iso||c.n),st=new Set(o[k]||[]);bad.forEach(x=>st.add(x));ok.forEach(x=>st.delete(x));o[k]=[...st];lsSet(WRONG_K,o)}
@@ -1924,10 +1934,10 @@ document.addEventListener("click",e=>{
     case "sayw":say(D()[S.card][0]);return;
     case "saye":say(EXPR[+b.dataset.i][0]);return;
     case "qa":{const i=+b.dataset.i;if(S.quizAns[i])return;S.quizAns[i]=b.dataset.o;if(S.quiz[i]&&b.dataset.o===S.quiz[i].ans)say(S.quiz[i].k);break}
-    case "qnext":S.qi=(S.qi||0)+1;if(S.qi>=S.quiz.length){S.quizDone=true;S.qi=0;const c=CLASSES.find(x=>x.n===S.quizFor);if(c)wrongSave(c,S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans).map(q=>q.k),S.quiz.filter((q,i)=>S.quizAns[i]===q.ans).map(q=>q.k))}break;
+    case "qnext":S.qi=(S.qi||0)+1;if(S.qi>=S.quiz.length){S.quizDone=true;S.qi=0;const c=CLASSES.find(x=>x.n===S.quizFor);if(c){const o=lsGet("mc_qdone",{});o[(c.sg||"")+"|"+(c.iso||c.n)]=Date.now();lsSet("mc_qdone",o)}if(c)wrongSave(c,S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans).map(q=>q.k),S.quiz.filter((q,i)=>S.quizAns[i]===q.ans).map(q=>q.k))}break;
     case "wHide":{const k=b.dataset.k==="ko"?"hideKo":"hideEs";S[k]=!S[k];S.wRev=new Set();break}
     case "wRev":{const i=b.dataset.i;if(S.wRev.has(i))S.wRev.delete(i);else S.wRev.add(i);if(i[0]==="k"&&S.wRev.has(i))say(b.dataset.w);break}
-    case "qbad":{const bad=S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans);const ws=((CLASSES.find(x=>x.n===S.quizFor)||PC()).words).filter(w=>w[0]&&w[2]);S.quiz=shuffle(bad).map(q=>({k:q.k,ans:q.ans,opts:shuffle([q.ans,...shuffle(ws.filter(w=>w[2]!==q.ans)).slice(0,3).map(w=>w[2])])}));S.quizAns={};S.quizDone=false;S.qi=0;break}
+    case "qbad":{const bad=S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans);const ws=((CLASSES.find(x=>x.n===S.quizFor)||PC()).words).filter(w=>w[0]&&w[2]);S.quiz=shuffle(bad).map(q=>({k:q.k,ans:q.ans,opts:shuffle([q.ans,...shuffle(ws.filter(w=>m1(w[2])!==q.ans)).slice(0,3).map(w=>m1(w[2]))])}));S.quizAns={};S.quizDone=false;S.qi=0;break}
     case "hoyQuiz":S.hoyQuiz=!S.hoyQuiz;if(S.hoyQuiz){S.pcls=+b.dataset.n;S.quizFor=null}break;
     case "grade":S.quizDone=true;toast("Calificado automáticamente");break;
     case "pcls":S.pcls=+b.dataset.n;S.qq=null;S.deck=null;S.card=0;S.flipped=false;S.qaOpen=new Set();break;
@@ -2209,6 +2219,28 @@ const _start0=start;start=function(){_start0.apply(this,arguments);let n=0;const
 start();
 
 
+/* Botón/gesto «atrás» del teléfono = subir un nivel (quiz → lista, clase → lista de clases, pestaña → Hoy / Panel) */
+(function(){let last="",popping=false;
+  const sig=()=>[S.role,S.tab,S.profTab||"",S.clsView?S.clsView.n+":"+S.clsView.mode:"",S.hoyQuiz?1:0,S.allWords?1:0].join("|");
+  const top=()=>S.role==="prof"?(!S.profTab||S.profTab==="panel"):(S.tab==="hoy"&&!S.hoyQuiz&&!S.clsView&&!S.allWords);
+  const depth=()=>S.role==="prof"?((S.profTab&&S.profTab!=="panel")?1:0):((S.tab!=="hoy"?1:0)+(S.clsView||S.allWords?1:0)+(S.hoyQuiz?1:0));
+  let d0=-1;
+  const r0=render;render=function(){const out=r0.apply(this,arguments);const g=sig(),d=depth();
+    if(!popping&&d0>=0&&g!==last)for(let k=d0;k<d;k++)try{history.pushState({mc:1},"")}catch(e){}
+    last=g;d0=d;popping=false;return out};
+  addEventListener("popstate",()=>{
+    if(S.hoyQuiz)S.hoyQuiz=false;
+    else if(S.clsView)S.clsView=null;
+    else if(S.allWords)S.allWords=false;
+    else if(S.role==="prof"&&S.profTab&&S.profTab!=="panel")S.profTab="panel";
+    else if(S.role!=="prof"&&S.tab!=="hoy")S.tab="hoy";
+    else return;
+    popping=true;try{stopVid()}catch(e){}render();window.scrollTo(0,0)});
+})();
+/* Selector de tema: siempre justo arriba de la barra de pestañas (no la tapa) */
+(function(){const fit=()=>{const sp=document.querySelector(".skinpick"),t=document.getElementById("tabs");if(!sp||!t)return;const r=t.getBoundingClientRect();
+  if(window.innerWidth<=700){sp.style.top="auto";sp.style.bottom=(r.top<window.innerHeight?window.innerHeight-r.top+8:16)+"px"}else{sp.style.bottom="";sp.style.top=""}};
+  addEventListener("resize",fit);addEventListener("scroll",fit,{passive:true});document.addEventListener("scroll",fit,{passive:true,capture:true});setInterval(fit,800);setTimeout(fit,300)})();
 /* ===== Vista previa (solo profesor): dispositivo + modo invitado ===== */
 (function(){if(window.top!==window.self)return;const D={m:[390,844,"휴대폰 390×844"],t:[820,1180,"태블릿 820×1180"]};
   const box=document.createElement("div");box.className="devpick";box.hidden=true;box.setAttribute("role","group");box.setAttribute("aria-label","미리보기");
