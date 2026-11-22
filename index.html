@@ -931,7 +931,7 @@ let CLASSES=[
 ];
 const CHAPTERS=[[0,"Repaso de la clase anterior"],[750,"Vocabulario nuevo"],[2110,"Gramática"],[3480,"Práctica en parejas"],[4800,"Tarea y dudas"]];
 const KNOWN=(()=>{try{return new Set(JSON.parse(localStorage.getItem("mc_known")||"[]"))}catch(e){return new Set()}})();
-function saveKnown(){try{localStorage.setItem("mc_known",JSON.stringify([...KNOWN]))}catch(e){}}
+function saveKnown(){if(typeof isAdm==="function"&&isAdm())return;try{localStorage.setItem("mc_known",JSON.stringify([...KNOWN]))}catch(e){}}
 const secs=t=>{const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s2=Math.floor(t%60);return (h?h+":"+String(m).padStart(2,"0"):m)+":"+String(s2).padStart(2,"0")};
 const durS=d=>d.split(":").reduce((a,b)=>a*60+(+b),0);
 function recOf(c){if(!c.iso)return c.rec;if(!c.video)return "none";return "todo el periodo"}
@@ -1114,8 +1114,9 @@ function quizBody(c){
 
 // ---- Práctica de preguntas: una a la vez (arena 2026-11-21) ----
 const QSR_K="mc_qsr",QWK_K="mc_qwk";
-const lsGet=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||"")||d}catch(e){return d}};
-const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const ADMIN_MEM={};const isAdm=()=>{try{return !!(S&&S.admin)}catch(e){return false}};
+const lsGet=(k,d)=>{if(isAdm())return k in ADMIN_MEM?ADMIN_MEM[k]:d;try{return JSON.parse(localStorage.getItem(k)||"")||d}catch(e){return d}};
+const lsSet=(k,v)=>{if(isAdm()){ADMIN_MEM[k]=v;return}try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 const qKey=(c,x)=>c.n+"|"+x.q;
 const weekId=()=>{const d=new Date(),j=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-"+Math.ceil(((d-j)/864e5+j.getDay()+1)/7)};
 let QREC={rec:null,url:null,on:false};
@@ -1180,7 +1181,7 @@ CERT["dom10|Ana Helaine"]=CERT["dom9|Ana Helaine"];CERT["dom10|Ana Patricia"]=CE
 const dl=id=>`https://drive.google.com/uc?export=download&id=${id}`;
 // Respuestas de tarea por pregunta. Prototipo: localStorage (mismo navegador para alumno y profesor). App real: hoja de Google.
 let HWA=(()=>{try{return JSON.parse(localStorage.getItem("mc_hwa")||"{}")}catch(e){return {}}})();
-let hwaSave=()=>{try{localStorage.setItem("mc_hwa",JSON.stringify(HWA))}catch(e){}};
+let hwaSave=()=>{if(isAdm())return;try{localStorage.setItem("mc_hwa",JSON.stringify(HWA))}catch(e){}};
 const hwKey=(gid,name,iso)=>gid+"|"+name+"|"+iso;
 const hwRec=k=>HWA[k]||(HWA[k]={a:{},fb:{},st:"pendiente",note:""});
 function hwItems(items,ctx){let qn=0;return items.map(x=>{
@@ -1762,7 +1763,7 @@ let DICT=null,DY={line:-1,heard:"",part:"",res:{},state:"idle",msg:""};
   if(DICT){DICT.onPartial(e=>{DY.part=e.text;dyLive()});DICT.onFinal(e=>{DY.heard+=e.text;DY.part="";dyLive()});
     DICT.onState(e=>{DY.state=e.state;if(e.state==="idle"){dyScore();if(e.reason==="not_granted"||e.reason==="unavailable"){DICT=null;DY.msg="El micrófono no está disponible aquí. Escucha y lee en voz alta, luego marca la línea."}}render()})}}}catch(e){DICT=null}})();
 function DYS(){try{return JSON.parse(localStorage.getItem("mc_diary")||"{}")}catch(e){return {}}}
-function dySet(i,v){const d=DYS();d[i]=v;try{localStorage.setItem("mc_diary",JSON.stringify(d))}catch(e){}GT.dy=d}
+function dySet(i,v){const d=DYS();d[i]=v;if(!isAdm())try{localStorage.setItem("mc_diary",JSON.stringify(d))}catch(e){}GT.dy=d}
 const hgOnly=t=>[...String(t)].filter(c=>c>="가"&&c<="힣");
 function dyAlign(tgt,got){const a=hgOnly(tgt),b=hgOnly(got),n=a.length,m=b.length,L=Array.from({length:n+1},()=>new Array(m+1).fill(0));
   for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=a[i]===b[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
@@ -1842,7 +1843,7 @@ const PLW=[{"b": 1, "q": "Preséntate en coreano. Escribe 2–3 oraciones sobre 
 // Prueba de nivel (PLACEMENT_ICK_01 · hoja "ICK · Prueba de nivel · Administración"): 5 bloques A1 A2 B1 B2 B3, dominio ≥75%, se recomienda el primer bloque sin dominio
 const PLB=["A1","A2","B1","B2","B3"],PL_UMBRAL=.75,PL_FORM="https://docs.google.com/forms/d/e/1FAIpQLSd6KCJP9dVV_7_Qts79xltGMEHu6O-1RQWI7dpRRBNZg2GOnQ/viewform";
 let PL=(()=>{try{return JSON.parse(localStorage.getItem("mc_pl")||"null")||{i:0,a:{},w:{},st:"intro"}}catch(e){return {i:0,a:{},w:{},st:"intro"}}})();
-const plSave=()=>{try{localStorage.setItem("mc_pl",JSON.stringify(PL))}catch(e){}};
+const plSave=()=>{if(isAdm())return;try{localStorage.setItem("mc_pl",JSON.stringify(PL))}catch(e){}};
 function plScore(){if(PL.res)return PL.res;const by=PLB.map((b,bi)=>{const qs=PLQ.filter(q=>q.b===bi+1),ok=qs.filter(q=>PL.a[q.id]===q.k).length;return {b,ok,n:qs.length,pass:ok/qs.length>=PL_UMBRAL}});
   const first=by.findIndex(x=>!x.pass),book=first<0?"B3+":by[first].b,tot=by.reduce((a,x)=>a+x.ok,0),blank=PLQ.filter(q=>PL.a[q.id]==null||PL.a[q.id]===-1).length;
   const cls=book==="B3"||book==="B3+"?"B2":book;return {by,book,cls,tot,blank}}
@@ -2085,6 +2086,7 @@ let TOK=null,ME=null,HWLIST=[];
 const PREV_GUEST=/[?&]as=guest/.test(location.search);try{const t=JSON.parse(localStorage.getItem("mc_tok")||"null");if(!PREV_GUEST&&t&&t.exp>Date.now()+60000)TOK=t.v}catch(e){}
 HWA={};hwaSave=()=>{};
 function api(a,p){
+  if(isAdm()&&/^(saveAnswer|submitHw|placement|enroll|tema)$/.test(a)){try{toast("관리자 미리보기: 학생 기록에 저장하지 않아요")}catch(e){}return Promise.resolve({})}
   return fetch(API,{method:"POST",body:JSON.stringify(Object.assign({a,t:TOK},p||{}))}).then(r=>r.json()).then(j=>{
     if(j.me)ME=j.me;if(!j.ok)throw new Error(j.error||"error");return j.data});
 }
