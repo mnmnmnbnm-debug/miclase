@@ -2208,7 +2208,7 @@ start();
   let dev="d",view="prof",ov=null;
   const draw=()=>{box.querySelectorAll("[data-d]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.d===dev));box.querySelectorAll("[data-v]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===view));
     if(ov){ov.remove();ov=null}if(dev==="d"&&view==="prof")return;
-    const base=location.href.split("#")[0].split("?")[0]+(view==="guest"?"?as=guest":view==="stu"?"?as=student":"");
+    const base=location.href.split("#")[0].split("?")[0]+(view==="guest"?"?as=guest":view==="stu"?"?as=student":"?as=prof")+"&v="+Date.now();
     let w,h,cap;if(dev==="d"){w=Math.min(1280,window.innerWidth-40);h=window.innerHeight-130;cap="PC"}else{[w,h,cap]=D[dev]}
     const sc=dev==="d"?1:Math.min(1,(window.innerHeight-130)/(h+24));ov=document.createElement("div");ov.className="devov";
     ov.innerHTML='<div class="cap">'+cap+' · '+(view==="guest"?"Invitado 화면":view==="stu"?"학생 화면":"선생님 화면")+' · 미리보기</div><div class="frame" style="transform:scale('+sc+');transform-origin:top center;margin-bottom:'+(-(h+24)*(1-sc))+'px"><iframe src="'+base+'" style="width:'+w+'px;height:'+h+'px" title="'+cap+'"></iframe></div>';document.body.appendChild(ov)};
