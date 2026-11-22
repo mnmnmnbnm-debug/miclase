@@ -330,6 +330,7 @@ i.pill{font-style:normal}
 .pslot.booked{border:0;background:var(--b2);color:var(--surface);display:grid;align-content:center;justify-items:center;line-height:1.15;overflow:hidden}
 .pslot.booked span{font-size:12px;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @container app (min-width: 700px){.psets{grid-template-columns:1fr 1fr 1.4fr}.psets .pk{grid-column:auto}}
+.vembed{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:14px;overflow:hidden;background:#000}.vembed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .act{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;text-align:center;min-width:0;width:100%}
 .act svg{display:block;width:24px;height:24px;margin:0 auto 2px;color:var(--accent-t);flex:none}
@@ -515,7 +516,14 @@ i.pill{font-style:normal}
 :root[data-skin="bermellon"] .btn,:root[data-skin="bermellon"] .chip.cur,:root[data-skin="bermellon"] .chip.cur b,:root[data-skin="bermellon"] .day.cur,:root[data-skin="bermellon"] .gflash.on,:root[data-skin="bermellon"] .gflash.on span,:root[data-skin="bermellon"] .gpill,:root[data-skin="bermellon"] .hjc[aria-pressed="true"],:root[data-skin="bermellon"] .mday.now,:root[data-skin="bermellon"] .pick button[aria-pressed="true"],:root[data-skin="bermellon"] .roles button[aria-pressed="true"],:root[data-skin="bermellon"] .seg button[aria-pressed="true"],:root[data-skin="bermellon"] .toast,:root[data-skin="bermellon"] .wb.today,:root[data-skin="bermellon"] .wcol.now .wh b,:root[data-skin="bermellon"] .wcol.now .wh span{color:#fff7f2}
 :root[data-skin="bermellon"] .btn.alt{color:var(--ink)}
 .bar .wm{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}.bar .wm span{margin-top:0;font-size:15px}
-.hwords{display:flex;flex-wrap:wrap;gap:6px}.hword{display:grid;gap:1px;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:6px 10px;font:inherit;cursor:pointer;max-width:100%}.hword b{font-size:16px}.hword span{font-size:12px;color:var(--ink2)}.hihead{display:flex;align-items:center;gap:10px}.mepic{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--line)}.wtools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 6px}.whbtn{font:inherit;font-size:13px;font-weight:600;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.whbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg)}.wstar-n{color:#e0a100;font-weight:700;font-size:12.5px;margin:0 0 6px}.wlist{display:grid;gap:6px}.wrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}.wrow button{font:inherit;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;min-height:42px;overflow-wrap:anywhere}.wrow .wko{font-weight:700;font-size:16px}.wrow .wes{font-size:13.5px;color:var(--ink2)}.wrow button.hid{color:var(--ink2);font-weight:400;font-size:12.5px;border-style:dashed;background:transparent}.wrow.bad button{border-color:#e0a100;background:color-mix(in srgb,#e0a100 14%,var(--surface2))}.wstar{color:#e0a100;font-style:normal;margin-right:4px}.quizbig{font-size:17px;padding:16px 18px;margin-top:6px}.qbar{height:6px;border-radius:6px;background:var(--surface2);overflow:hidden;margin:4px 0 10px}.qbar i{display:block;height:100%;background:var(--accent);transition:width .3s}.qbig{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:30px;font-weight:700;margin:10px 0 6px;color:var(--ink)}.qz .opts{margin-top:8px}.qq .qqlisten{display:flex;align-items:center;justify-content:center;gap:8px}.qqmic{margin:10px 0}.quizbig svg{width:20px;height:20px;vertical-align:-4px}.qqsay{text-align:center;border:2px dashed var(--line);border-radius:14px;color:var(--ink2)}.quizbig.rec{background:#c62828;color:#fff}.qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
+.hwords{display:flex;flex-wrap:wrap;gap:6px}.hword{display:grid;gap:1px;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:6px 10px;font:inherit;cursor:pointer;max-width:100%}.hword b{font-size:16px}.hword span{font-size:12px;color:var(--ink2)}.hihead{display:flex;align-items:center;gap:10px}.mepic{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--line)}.wtools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 6px}.whbtn{font:inherit;font-size:13px;font-weight:600;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.whbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg)}.wstar-n{color:#e0a100;font-weight:700;font-size:12.5px;margin:0 0 6px}.wlist{display:grid;gap:6px}.wrow{display:grid;grid-template-columns:1fr 1fr;gap:6px}.wrow button{font:inherit;text-align:left;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;min-height:42px;overflow-wrap:anywhere}.wrow .wko{font-weight:700;font-size:16px}.wrow .wes{font-size:13.5px;color:var(--ink2)}.wrow button.hid{color:var(--ink2);font-weight:400;font-size:12.5px;border-style:dashed;background:transparent}.wrow.bad button{border-color:#e0a100;background:color-mix(in srgb,#e0a100 14%,var(--surface2))}.wstar{color:#e0a100;font-style:normal;margin-right:4px}.quizbig{font-size:17px;padding:16px 18px;margin-top:6px}.qbar{height:6px;border-radius:6px;background:var(--surface2);overflow:hidden;margin:4px 0 10px}.qbar i{display:block;height:100%;background:var(--accent);transition:width .3s}.qbig{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:30px;font-weight:700;margin:10px 0 6px;color:var(--ink)}.qz .opts{margin-top:8px}.qq .qqlisten{display:flex;align-items:center;justify-content:center;gap:8px}.qqmic{margin:10px 0}.quizbig svg{width:20px;height:20px;vertical-align:-4px}.qqsay{text-align:center;border:2px dashed var(--line);border-radius:14px;color:var(--ink2)}.quizbig.rec{background:#c62828;color:#fff}.qq .qbig{margin:4px 0 2px}.qq .qbar{margin:2px 0 6px}
+.qqtools{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:stretch;margin:8px 0 4px}
+.qqtools .qqmic{margin:0}.qqtools .quizbig{margin-top:0;padding:12px 14px;font-size:15px;height:100%}.qqtools audio{height:34px}
+.qqlab{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-t);margin:8px 0 4px}
+.qq .ans{padding:6px 12px;gap:2px}.qq .arow{padding:2px 0}
+.qq .qqtip{padding:7px 10px;margin-top:6px;font-size:13px}
+.qq .qqrate .btn{padding-top:10px;padding-bottom:10px}
+.qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
 .skinpick{position:fixed;z-index:40;top:calc(10px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .skinpick button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);padding:0}
 .skinpick button[data-s="hanji"]{background:#f5f1ea}.skinpick button[data-s="tinta"]{background:#1b1b1b}.skinpick button[data-s="bermellon"]{background:#e5452f}
@@ -569,7 +577,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   <div class="shell" id="shell">
   <div class="app" id="app">
     <div class="bar">
-      <div class="logo"><svg class="mark" viewBox="0 0 1024 1024" role="img" aria-label="¡Sí se puede coreano!"><rect width="1024" height="1024" rx="230" fill="#1b1b1b"/><g transform="translate(-10 61) scale(4.9)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="22"><path d="M86 48 L36 162" stroke="#ffffff"/><path d="M64 98 L122 162" stroke="#ffffff"/><path d="M162 70 L162 170" stroke="#ffffff"/><path d="M150 40 L180 14" stroke="#ff6a52"/></g></svg><div class="wm"><b>Mi Clase</b><span>¡Sí se puede coreano!</span></div></div>
+      <div class="logo" role="link" tabindex="0" title="Inicio" style="cursor:pointer"><svg class="mark" viewBox="0 0 1024 1024" role="img" aria-label="¡Sí se puede coreano!"><rect width="1024" height="1024" rx="230" fill="#1b1b1b"/><g transform="translate(-10 61) scale(4.9)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="22"><path d="M86 48 L36 162" stroke="#ffffff"/><path d="M64 98 L122 162" stroke="#ffffff"/><path d="M162 70 L162 170" stroke="#ffffff"/><path d="M150 40 L180 14" stroke="#ff6a52"/></g></svg><div class="wm"><b>Mi Clase</b><span>¡Sí se puede coreano!</span></div></div>
       <div class="who" id="who"></div>
     </div>
     <div class="skinpick" role="group" aria-label="Elige el tema de la app"><button type="button" data-s="hanji" aria-label="Tema Hanji (claro)" title="Hanji"></button><button type="button" data-s="tinta" aria-label="Tema Tinta (oscuro)" title="Tinta"></button><button type="button" data-s="bermellon" aria-label="Tema Bermellón (rojo)" title="Bermellón"></button></div>
@@ -998,7 +1006,7 @@ function vVideo(c){
   if(c.iso&&c.video){const id=(c.video.match(/\/d\/([^/]+)/)||[])[1];
     return `<div class="row">${back()}<span class="muted">Grabación disponible todo el periodo</span></div>
     <div class="card span2"><div class="row"><b>Clase ${c.n} · <span class="ko">${c.ko}</span></b><span class="muted">${c.date}</span></div>
-      <a class="vframe vposter" href="${c.video}" target="_blank" rel="noopener"><span class="vplay">▶</span><b>Ver grabación</b><small>Clase ${c.n} · ${c.date}</small></a><div class="example">시안에서는 claude.ai 보안 규칙으로 Drive 플레이어를 화면 안에 넣을 수 없어요. 실제 앱에서는 이 자리에서 바로 재생돼요.</div>
+      ${id?`<div class="vembed"><iframe src="https://drive.google.com/file/d/${id}/preview" title="Grabación Clase ${c.n}" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe></div>`:`<a class="vframe vposter" href="${c.video}" target="_blank" rel="noopener"><span class="vplay">▶</span><b>Ver grabación</b><small>Clase ${c.n} · ${c.date}</small></a>`}
       <div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><a class="btn sm" href="${c.video}" target="_blank" rel="noopener">Abrir en Google Drive</a><button class="btn sm alt" data-act="copyRec" data-u="${c.video}">Copiar enlace</button></div>
       <div class="muted" style="font-size:12px">Si el video no carga aquí, ábrelo en Google Drive con tu cuenta de Google.</div></div>`}
   const P=S.player, D=durS(c.dur), pct=Math.min(100,P.t/D*100);
@@ -1137,22 +1145,20 @@ function qaPractice(c){
       <div class="big">${ok} / ${ids.length}</div><div class="muted">preguntas que ya sabes responder</div>
       ${hard.length?`<div class="stack" style="margin-top:8px">${hard.map(i=>`<div class="arow"><div class="ko">${esc(qs[i].q)}</div><span class="pill ${Q.res[i]==="casi"?"p-warn":"p-gray"}">${Q.res[i]==="casi"?"Casi":"No"}</span></div>`).join("")}</div>`:""}
       <div class="row" style="justify-content:flex-start;gap:8px;margin-top:10px">${hard.length?`<button class="btn" data-act="qqHard">Repasar las difíciles (${hard.length})</button>`:""}<button class="btn alt" data-act="qqRestart">Empezar otra vez</button></div></div>`}
-  const i=Q.order[Q.pos],x=qs[i],N=Q.order.length,armed=Date.now()>=Q.armAt;
-  if(!armed)setTimeout(()=>{const b=document.getElementById("qqShow");if(b&&S.qq===Q&&!Q.show){b.disabled=false;b.textContent="Ver cómo responder"}},Q.armAt-Date.now()+30);
+  const i=Q.order[Q.pos],x=qs[i],N=Q.order.length;
   const canRec=!!(navigator.mediaDevices&&window.MediaRecorder);
   return `<div class="card wide qq"><div class="row"><h3>Pregunta ${Q.pos+1} / ${N}</h3>${goal}</div>
     <div class="qbar"><i style="width:${Math.round(Q.pos/N*100)}%"></i></div>
-    <button class="btn alt block qqlisten" data-act="sayk" data-w="${esc(x.q)}">${IC.spk} Escuchar la pregunta</button>
     <div class="qbig ko" style="font-size:22px">${esc(x.q)}</div>
-    ${Q.tr?`<div class="muted" style="text-align:center">${esc(x.qe||"")}</div>`:`<div style="text-align:center"><button class="link" data-act="qqTr">Ver traducción</button></div>`}
-    <div class="qqmic">${canRec?`<button class="btn block quizbig ${QREC.on?"rec":""}" data-act="qqRec">${QREC.on?"■ Terminar grabación":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Responde en voz alta`}</button>
+    ${x.qe?`<div class="muted" style="text-align:center">${esc(x.qe)}</div>`:""}
+    <div class="qqtools"><button class="btn alt qqlisten" data-act="sayk" data-w="${esc(x.q)}">${IC.spk} Escuchar</button><div class="qqmic">${canRec?`<button class="btn block quizbig ${QREC.on?"rec":""}" data-act="qqRec">${QREC.on?"■ Terminar grabación":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Responde en voz alta`}</button>
       ${QREC.url&&!QREC.on?`<audio controls src="${QREC.url}" style="width:100%;margin-top:6px"></audio><div class="muted" style="font-size:12px">Tu grabación se queda solo en este dispositivo.</div>`:""}`
-      :`<div class="quizbig qqsay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Responde en voz alta</div>`}</div>
-    ${Q.show?`<div class="ans">${x.a.map(a=>`<div class="arow"><div><div class="ko ak">${esc(a[0])}</div><div class="muted">${esc(a[1]||"")}</div></div><button class="say" data-act="sayk" data-w="${esc(a[0])}" aria-label="Escuchar respuesta">${IC.spk}</button></div>`).join("")||`<div class="muted">Respuesta libre.</div>`}</div>
-      <div class="qqtip">Ahora dilo con tu información: cambia el nombre, el lugar o la hora por los tuyos.</div>
-      <div class="muted" style="text-align:center;margin-top:6px">¿Cómo te fue?</div>
-      <div class="qqrate"><button class="btn" data-act="qqRate" data-r="ok">Lo sabía</button><button class="btn alt" data-act="qqRate" data-r="casi">Casi</button><button class="btn alt" data-act="qqRate" data-r="no">No</button></div>`
-     :`<button id="qqShow" class="btn block" data-act="qqShow" ${armed?"":"disabled"}>${armed?"Ver cómo responder":"Piensa tu respuesta…"}</button>`}
+      :`<div class="quizbig qqsay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Responde en voz alta</div>`}</div></div>
+    <div class="qqlab">Cómo responder</div>
+    <div class="ans">${x.a.map(a=>`<div class="arow"><div><div class="ko ak">${esc(a[0])}</div><div class="muted">${esc(a[1]||"")}</div></div><button class="say" data-act="sayk" data-w="${esc(a[0])}" aria-label="Escuchar respuesta">${IC.spk}</button></div>`).join("")||`<div class="muted">Respuesta libre.</div>`}</div>
+    <div class="qqtip">Dilo con tu información: cambia el nombre, el lugar o la hora por los tuyos.</div>
+    <div class="muted" style="text-align:center;margin-top:4px;font-size:13px">¿Cómo te fue?</div>
+    <div class="qqrate"><button class="btn" data-act="qqRate" data-r="ok">Lo sabía</button><button class="btn alt" data-act="qqRate" data-r="casi">Casi</button><button class="btn alt" data-act="qqRate" data-r="no">No</button></div>
   </div>`;
 }
 function vPrac(){
@@ -2151,14 +2157,24 @@ function loginBox(msg){
     google.accounts.id.renderButton($("#gbtn"),{theme:"outline",size:"large",text:"continue_with",locale:"es"});try{google.accounts.id.prompt()}catch(e){}};
   draw();
 }
-function logout(){try{localStorage.removeItem("mc_tok");localStorage.removeItem("mc_was")}catch(e){}TOK=null;ME=null;try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload()}
+function logout(){try{localStorage.removeItem("mc_tok");localStorage.removeItem("mc_was");localStorage.removeItem("mc_data")}catch(e){}TOK=null;ME=null;try{google.accounts.id.disableAutoSelect()}catch(e){}location.reload()}
 function start(){
   if(!API||!CID){$("#screen").innerHTML=`<div class="realbar"><b>Falta configurar la app</b><div class="muted">Pon API_URL y CLIENT_ID en config.js</div></div>`;return}
   if(!TOK){let was=false;try{was=!PREV_GUEST&&localStorage.getItem("mc_was")==="1"}catch(e){}
     if(was){loginBox("Volviendo a entrar con tu cuenta de Google…");return}
     S.role="guest";S.gs="anon";S.tab=S.tab||"hoy";render();return}
   $("#screen").innerHTML=`<div class="realbar"><div class="muted">Cargando tus clases…</div></div>`;
-  api("data").then(d=>{
+  // Caché en este dispositivo: muestra al instante lo último que se cargó y actualiza en segundo plano
+  const mail=(()=>{try{return JSON.parse(decodeURIComponent(escape(atob(TOK.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"))))).email||""}catch(e){return ""}})();
+  let cached=null;try{const c=JSON.parse(localStorage.getItem("mc_data")||"null");if(c&&c.mail===mail&&Date.now()-c.at<14*864e5)cached=c}catch(e){}
+  const fresh=api("data").then(d=>{const str=JSON.stringify(d);
+    try{localStorage.setItem("mc_data",JSON.stringify({mail,me:ME,d,at:Date.now()}))}catch(e){try{localStorage.removeItem("mc_data")}catch(_){}}
+    if(!cached)return d;
+    if(JSON.stringify(cached.d)!==str){let last=0;try{last=+sessionStorage.getItem("mc_rl")||0}catch(e){}
+      if(Date.now()-last>60000){try{sessionStorage.setItem("mc_rl",String(Date.now()))}catch(e){}location.reload()}}
+    return null});
+  if(cached){ME=cached.me;fresh.catch(e=>{if(/login|token/i.test(e.message)){try{localStorage.removeItem("mc_data")}catch(_){}loginBox("Tu sesión terminó. Entra otra vez.")}})}
+  (cached?Promise.resolve(cached.d):fresh).then(d=>{if(!d)return;
     const m=ME||{};
     if(m.role==="teacher"){window.__QA=d.preguntas||{};window.__PW=d.palabras||{};Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
       const first=GRP.find(g=>g.st&&g.st.length)||GRP[0];S.who={g:first.id,n:first.st[0]||""};applyWho();
@@ -2256,5 +2272,10 @@ start();
     ov.innerHTML='<div class="cap">'+cap+' · '+(view==="guest"?"Invitado 화면":view==="stu"?"학생 화면":"선생님 화면")+' · 미리보기</div><div class="frame" style="transform:scale('+sc+');transform-origin:top center;margin-bottom:'+(-(h+24)*(1-sc))+'px"><iframe src="'+base+'" style="width:'+w+'px;height:'+h+'px" title="'+cap+'"></iframe></div>';document.body.appendChild(ov)};
   box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.d)dev=b.dataset.d;if(b.dataset.v)view=b.dataset.v;draw()});
   draw();setInterval(()=>{const prof=typeof S!=="undefined"&&S&&S.role==="prof";box.hidden=!prof;if(!prof&&ov){dev="d";view="prof";draw()}},1000)})();
+</script>
+<script>
+(function(){const L=document.querySelector(".bar .logo");if(!L)return;
+const go=()=>{try{S.clsView=null;S.allWords=false;S.inClass=false;S.hoyQuiz=false}catch(e){}const b=document.querySelector("#tabs button");if(b)b.click();window.scrollTo({top:0,behavior:"smooth"})};
+L.addEventListener("click",go);L.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});})();
 </script>
 </body></html>
