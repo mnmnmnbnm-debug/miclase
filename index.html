@@ -523,6 +523,7 @@ i.pill{font-style:normal}
 .qq .ans{padding:6px 12px;gap:2px}.qq .arow{padding:2px 0}
 .qq .qqtip{padding:7px 10px;margin-top:6px;font-size:13px}
 .qq .qqrate .btn{padding-top:10px;padding-bottom:10px}
+.pick button.pnoq{opacity:.55}
 .qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
 .skinpick{position:fixed;z-index:40;top:calc(10px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .skinpick button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);padding:0}
@@ -571,6 +572,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .sugbox .sugcats button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13.5px;min-height:36px}
 .sugbox .sugcats button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .sugbox .sugfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}@media (max-width:520px){.grid3{grid-template-columns:1fr}}
+.accrow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.accrow small{display:block;color:var(--muted);font-size:12px}.accr{text-align:right}.accr b.bad{color:var(--accent-t)}
 </style>
 
 <div class="wrap">
@@ -766,7 +769,7 @@ function applyWho(){
   const nx=D[s.cur];s.name=ANA.group;s.when=nx?lWhen(nx,g.t,g.e):"Fin del periodo";
   s.topic=[`${p.book||""} · ${p.lesson||""}`,`${book} · ${ANA.lesson}`];
   if(nx){const d=new Date(nx+"T12:00:00Z");S.calM=(d.getUTCFullYear()-2026)*12+d.getUTCMonth()}
-  CLASSES=REAL[g.id]||[];S.pcls=CLASSES[0]?CLASSES[0].n:0;S.quizFor=null;S.clsView=null;S.allWords=false;S.deck=null;S.card=0;
+  CLASSES=REAL[g.id]||[];S.pcls=CLASSES[0]?CLASSES[0].n:0;S.pclsUser=false;S.quizFor=null;S.clsView=null;S.allWords=false;S.deck=null;S.card=0;
 }
 const ALLSTU=()=>GRP.flatMap(g=>g.st.map(n=>({g:g.id,gn:g.name,n})));
 function adminBar(){if(!S.admin)return "";const cur=S.who.g+"|"+S.who.n;
@@ -985,7 +988,7 @@ function vClases(){
   if(S.allWords)return vAllWords();
   const all=CLASSES.flatMap(c=>c.words), kn=all.filter(w=>KNOWN.has(w[0])).length;
   return `<div class="row"><h2>Clases</h2></div>
-  ${CLASSES.length?"":`<div class="card span2"><b>Las clases de tu grupo aparecerán aquí</b><div class="muted">Después de cada clase verás tus apuntes y la grabación.</div><div class="example">시안: 실제 수업 기록은 아직 Intensivo 10:00 반만 연결했어요</div></div>`}${CLASSES.map(c=>{const rc=recOf(c),none=rc==="none",exp=rc==="expired",pend=rc==="pending";return `<div class="card cls">
+  ${CLASSES.length?"":`<div class="card span2"><b>Las clases de tu grupo aparecerán aquí</b><div class="muted">Después de cada clase verás tus apuntes y la grabación.</div></div>`}${CLASSES.map(c=>{const rc=recOf(c),none=rc==="none",exp=rc==="expired",pend=rc==="pending";return `<div class="card cls">
     <div class="row"><span class="example" style="color:var(--accent-t);font-size:17px;letter-spacing:.02em">Clase ${c.n}</span><span style="font-size:17px;font-weight:800;color:var(--ink)">${c.date}</span></div>
     <div><div class="ko" style="font-weight:900;font-size:19px">${c.ko}</div><div class="muted">${c.es}</div></div>
     <div class="acts">
@@ -1172,7 +1175,7 @@ function qqStart(c,only){
 }
 function qaPractice(c){
   const qs=c.qa||QA[c.n]||[];
-  if(!qs.length)return `<div class="card wide"><h3>Preguntas y respuestas</h3><div class="muted">Esta clase todavía no tiene preguntas para practicar.</div></div>`;
+  if(!qs.length){const prev=CLASSES.find(x=>x.n!==c.n&&((x.qa||QA[x.n]||[]).length));return `<div class="card wide"><h3>Preguntas y respuestas</h3><div class="muted">Las preguntas de esta clase estarán listas muy pronto (normalmente el mismo día de la clase).</div>${prev?`<button class="btn" style="margin-top:10px" data-act="pcls" data-n="${prev.n}">Practicar la Clase ${prev.n} · <span class="ko">${esc(prev.ko||"")}</span></button>`:""}</div>`}
   if(!S.qq||S.qq.n!==c.n)qqStart(c);
   const Q=S.qq,wk=lsGet(QWK_K,{}),wn=wk[weekId()]||0,goal=`<span class="pill p-gray">Esta semana: ${Math.min(wn,3)}/3</span>`;
   if(Q.done){const ids=Object.keys(Q.res).map(Number),ok=ids.filter(i=>Q.res[i]==="ok").length,hard=ids.filter(i=>Q.res[i]!=="ok");
@@ -1197,10 +1200,12 @@ function qaPractice(c){
   </div>`;
 }
 function vPrac(){
-  if(!CLASSES.length)return `<h2>Práctica</h2><div class="card span2"><b>Aquí practicarás lo de cada clase</b><div class="muted">Preguntas, tarjetas y quiz con el vocabulario de tu grupo.</div><div class="example">시안: 실제 수업 기록은 아직 Intensivo 10:00 반만 연결했어요</div></div>`;
+  if(!CLASSES.length)return `<h2>Práctica</h2><div class="card span2"><b>Aquí practicarás lo de cada clase</b><div class="muted">Preguntas, tarjetas y quiz con el vocabulario de tu grupo.</div></div>`;
+  const hasQ=x=>((x.qa||QA[x.n]||[]).length>0);
+  if(!S.pclsUser&&!hasQ(PC())){const f=CLASSES.find(hasQ);if(f&&f.n!==S.pcls){S.pcls=f.n;S.qq=null}}
   const c=PC();
   if(S.quizFor!==c.n){S.quiz=makeQuiz(c.words,c.words.length);S.quizAns={};S.quizDone=false;S.quizFor=c.n;S.qi=0}
-  const pick=`<div class="pick" role="group" aria-label="Elige la clase">${CLASSES.map(x=>`<button data-act="pcls" data-n="${x.n}" aria-pressed="${x.n===c.n}"><span>Clase ${x.n}</span><b class="ko">${x.ko}</b></button>`).join("")}</div>`;
+  const pick=`<div class="pick" role="group" aria-label="Elige la clase">${CLASSES.map(x=>`<button data-act="pcls" data-n="${x.n}" aria-pressed="${x.n===c.n}" ${hasQ(x)?"":'class="pnoq"'}><span>Clase ${x.n}${hasQ(x)?"":" · pronto"}</span><b class="ko">${x.ko}</b></button>`).join("")}</div>`;
   const seg=`<div class="seg" role="group" aria-label="Modo de práctica">${[["qa","Preguntas y respuestas"],["cards","Tarjetas"],["quiz","Quiz"]].map(([k,t])=>`<button data-act="pv" data-v="${k}" aria-pressed="${S.pracView===k}">${t}</button>`).join("")}</div>`;
   let body="";
   S.pracView="qa";
@@ -1926,7 +1931,22 @@ function vGNivel(){
   ${PL.rev?`<div class="card span2"><h3>Tus respuestas</h3><div class="list">${PLQ.map((q,i)=>{const K=(PL.res&&PL.res.correct)||{},a=PL.a[q.id],ok=a===K[q.id];return `<div class="li plrev"><div><b>${i+1}.</b> ${esc(q.q)}<div class="ko">${a==null||a===-1?`<span class="muted">Sin responder</span>`:`<span style="color:${ok?"#1f7a45":"#c0392b"}">${esc(q.o[a])}</span>`}${ok||K[q.id]==null?"":` · Correcta: <b>${esc(q.o[K[q.id]])}</b>`}</div><div class="muted" style="font-size:12.5px">${esc(q.x)}</div></div><span>${ok?"✓":"✕"}</span></div>`}).join("")}</div></div>`:""}`}
 const GUEST_TABS=[["hoy","Inicio"],["clases","Clases"],["prac","Práctica"],["tareas","Tareas"],["nivel","Prueba de nivel"],["planes","Planes"]];
 const STU_TABS=[["hoy","Hoy"],["clases","Clases"],["prac","Práctica"],["tareas","Tareas"],["cuenta","Mi cuenta"]];
-const PROF_TABS=[["panel","오늘"],["stu","학생"],["ins","수강신청"],["priv","1:1"],["tareas","숙제"],["exam","시험"]];
+const PROF_TABS=[["panel","오늘"],["stu","학생"],["acc","접속"],["ins","수강신청"],["priv","1:1"],["tareas","숙제"],["exam","시험"]];
+
+/* ===== 접속 현황 (관리자) · 2026-11-23 ===== */
+function vAccess(){const A=window.__ACC;
+  if(!A)return `<h2>학생 접속 현황</h2><div class="card wide"><div class="muted">접속 기록을 불러오는 중이거나, 서버 업데이트 전이에요.</div></div>`;
+  const now=Date.now(),day=864e5,LG=A.log||{},since=A.since||"";
+  const rel=t=>{if(!t)return "접속 기록 없음";const d=(now-new Date(t))/day;const dt=new Date(t);const hm=dt.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",timeZone:"America/Mexico_City"});return d<1&&dt.toLocaleDateString("en-CA",{timeZone:"America/Mexico_City"})===new Date().toLocaleDateString("en-CA",{timeZone:"America/Mexico_City"})?`오늘 ${hm}`:d<2?`어제 ${hm}`:`${Math.floor(d)}일 전`};
+  const rows=[];(A.roster||[]).forEach(r=>{const L=LG[(r.email||"").toLowerCase()]||{};rows.push(Object.assign({},r,{last:L.last||"",d7:L.d7||0,d30:L.d30||0,v:L.n||0}))});
+  const gs=[...new Set(rows.map(r=>r.g))];const fg=S.accG||"all";const V=rows.filter(r=>fg==="all"||r.g===fg).sort((a,b)=>(a.last||"")<(b.last||"")?-1:1);
+  const today=rows.filter(r=>r.last&&(now-new Date(r.last))<day).length,wk=rows.filter(r=>r.d7>0).length,never=rows.filter(r=>!r.last).length;
+  return `<h2>학생 접속 현황</h2>
+  <div class="grid3"><div class="stat"><b>${today}</b><span>24시간 안에 접속</span></div><div class="stat"><b>${wk}</b><span>최근 7일 접속 (전체 ${rows.length}명)</span></div><div class="stat"><b style="color:var(--accent-t)">${never}</b><span>접속 기록 없음</span></div></div>
+  <div class="card wide"><div class="filters"><select id="accG" aria-label="반"><option value="all">모든 반</option>${gs.map(g=>`<option value="${esc(g)}" ${fg===g?"selected":""}>${esc(g)}</option>`).join("")}</select></div>
+  <div class="muted">${since?`기록 시작: ${esc(since)} · `:""}앱을 열 때마다 기록돼요 (같은 학생은 10분에 한 번).</div>
+  <div class="acclist">${V.map(r=>`<div class="accrow"><div><b>${esc(r.n)}</b><small>${esc(r.g)}${r.email?"":" · 이메일 없음"}</small></div><div class="accr"><b class="${r.last?"":"bad"}">${rel(r.last)}</b><small>7일 ${r.d7}일 · 30일 ${r.d30}일 · 총 ${r.v}회</small></div></div>`).join("")}</div></div>`}
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="accG"){S.accG=e.target.value;render()}});
 function render(){try{document.body.dataset.r=(S.role==="vivo"||S.role==="oyente")?"stu":S.role}catch(e){}
   document.querySelectorAll(".roles button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.role===S.role));
   const prof=S.role==="prof";
@@ -1934,10 +1954,10 @@ function render(){try{document.body.dataset.r=(S.role==="vivo"||S.role==="oyente
   const tabs=prof?PROF_TABS:S.role==="guest"?GUEST_TABS:STU_TABS;
   const cur=prof?S.profTab:S.tab;
   $("#tabs").style.setProperty("--n",tabs.length);
-  const icm={hoy:IC.hoy,clases:IC.clases,prac:IC.prac,tareas:IC.tareas,cuenta:IC.cuenta,planes:IC.ins,nivel:IC.exam,panel:IC.panel,stu:IC.cuenta,priv:IC.one,att:IC.att,ins:IC.ins,exam:IC.exam};
+  const icm={hoy:IC.hoy,clases:IC.clases,prac:IC.prac,tareas:IC.tareas,cuenta:IC.cuenta,planes:IC.ins,nivel:IC.exam,panel:IC.panel,stu:IC.cuenta,acc:IC.att||IC.cuenta,priv:IC.one,att:IC.att,ins:IC.ins,exam:IC.exam};
   $("#tabs").innerHTML=tabs.map(([k,t])=>`<button data-tab="${k}" ${cur===k?'aria-current="page"':""}>${icm[k]}${t}</button>`).join("");
   let h;
-  if(prof){h={panel:vPanel,stu:vStudents,priv:vPriv,att:vRoll,ins:vIns,tareas:vHwReview,exam:vGen}[S.profTab]()}
+  if(prof){h={panel:vPanel,stu:vStudents,acc:vAccess,priv:vPriv,att:vRoll,ins:vIns,tareas:vHwReview,exam:vGen}[S.profTab]()}
   else if(S.role==="guest"){h={hoy:vGHoy,clases:vGClases,prac:vGPrac,tareas:vGTareas,nivel:vGNivel,planes:vGPlanes}[S.tab]()}
   else if(S.inClass){h=adminBar()+vClass()}
   else{h=adminBar()+{hoy:vHoy,clases:vClases,prac:vPrac,tareas:vTareas,cuenta:vCuenta}[S.tab]()}
@@ -1987,7 +2007,7 @@ document.addEventListener("click",e=>{
     case "qbad":{const bad=S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans);const ws=((CLASSES.find(x=>x.n===S.quizFor)||PC()).words).filter(w=>w[0]&&w[2]);S.quiz=shuffle(bad).map(q=>({k:q.k,ans:q.ans,opts:shuffle([q.ans,...shuffle(ws.filter(w=>m1(w[2])!==q.ans)).slice(0,3).map(w=>m1(w[2]))])}));S.quizAns={};S.quizDone=false;S.qi=0;break}
     case "hoyQuiz":S.hoyQuiz=!S.hoyQuiz;if(S.hoyQuiz){S.pcls=+b.dataset.n;S.quizFor=null}break;
     case "grade":S.quizDone=true;toast("Calificado automáticamente");break;
-    case "pcls":S.pcls=+b.dataset.n;S.qq=null;S.deck=null;S.card=0;S.flipped=false;S.qaOpen=new Set();break;
+    case "pcls":S.pcls=+b.dataset.n;S.pclsUser=true;S.qq=null;S.deck=null;S.card=0;S.flipped=false;S.qaOpen=new Set();break;
     case "qqTr":S.qq.tr=true;break;
     case "qqShow":if(Date.now()<S.qq.armAt)return;S.qq.show=true;{const c=PC(),x=(c.qa||QA[c.n]||[])[S.qq.order[S.qq.pos]];if(x&&x.a[0])say(x.a[0][0])}break;
     case "qqRec":{if(QREC.on){try{QREC.rec.stop()}catch(e){}QREC.on=false;break}
@@ -2151,6 +2171,7 @@ function loadGroup(g){
 
 /* Profesor: alumnos reales, 1:1 desde Calendar y progreso desde la hoja Progreso */
 function applyTeacher(d){
+  window.__ACC=d.accesos||null;
   Object.entries(d.progreso||{}).forEach(([k,v])=>{PROG[ID_IN[k]||k]=v});
   const PV=d.privados||[];
   PRIVL=PV.filter(p=>p.tipo!=="preply").map(p=>({n:p.n,days:[],t:p.t,e:p.e,from:p.from,until:p.until,note:p.note}));
