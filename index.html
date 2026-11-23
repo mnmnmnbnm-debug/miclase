@@ -591,6 +591,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .qlist .qlq{font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all}
 .qlist .qlbtn{margin:8px 0 0 36px}
 .qlist .ans{margin:8px 0 0 36px}
+/* 2026-11-23: si no hay foto de Google (vista previa del profesor, cuenta sin foto) → inicial */
+.mepic.mini{display:inline-grid;place-items:center;background:var(--accent);color:#fff;font-size:18px;font-weight:800;border-color:transparent}
 </style>
 
 <div class="wrap">
@@ -906,7 +908,7 @@ function vSug(){if(!(S.role==="vivo"||S.role==="oyente"))return "";const t=(type
 function vHoy(){
   const a=S.attendance;
   return `
-  <div class="row"><h2 class="hihead">${picTag()}¡Hola, ${esc(ANA.name)}! 👋</h2><span class="pill p-a1">${ANA.book}</span></div>
+  <div class="row"><h2 class="hihead">${picTag(ANA.name)}¡Hola, ${esc(ANA.name)}! 👋</h2><span class="pill p-a1">${ANA.book}</span></div>
   
   <div class="card dark span2">
     <div class="row"><span class="pill" style="background:var(--accent-t);color:#fff">${G().todayIsClass?"HOY":"PRÓXIMA CLASE"}</span><span style="font-size:12.5px;opacity:.8">Clase ${G().cur+1} de ${G().dates.length}</span></div>
@@ -2213,7 +2215,7 @@ function applyTeacher(d){
 function myPic(){ // foto de la cuenta de Google del alumno (viene en su propio token; no se guarda en ningún lado)
   try{if(!TOK||(typeof ME!=="undefined"&&ME&&ME.role==="teacher"))return "";const p=JSON.parse(decodeURIComponent(escape(atob(TOK.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")))));return p.picture||""}catch(e){return ""}
 }
-const picTag=()=>{const u=myPic();return u?`<img class="mepic" src="${esc(u)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`:""};
+const picTag=nm=>{const u=myPic(),ini=String(nm||"").trim().charAt(0).toUpperCase(),fb=ini?`<span class="mepic mini" aria-hidden="true">${esc(ini)}</span>`:"";return u?`<img class="mepic" src="${esc(u)}" alt="" referrerpolicy="no-referrer" onerror="this.outerHTML=this.dataset.fb||''" data-fb="${esc(fb)}">`:fb};
 function setToken(cred){
   try{const p=JSON.parse(atob(cred.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));localStorage.setItem("mc_tok",JSON.stringify({v:cred,exp:p.exp*1000}))}catch(e){}
   TOK=cred;try{localStorage.setItem("mc_was","1")}catch(e){}start();
