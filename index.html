@@ -524,6 +524,7 @@ i.pill{font-style:normal}
 .qq .qqtip{padding:7px 10px;margin-top:6px;font-size:13px}
 .qq .qqrate .btn{padding-top:10px;padding-bottom:10px}
 .pick button.pnoq{opacity:.55}
+.hwnum{font-size:1.15em;margin-right:4px}.hwqt{margin:12px 0 4px}
 .qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
 .skinpick{position:fixed;z-index:40;top:calc(10px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .skinpick button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);padding:0}
@@ -1240,9 +1241,10 @@ const hwRec=k=>HWA[k]||(HWA[k]={a:{},fb:{},st:"pendiente",note:""});
 function hwItems(items,ctx){let qn=0;return items.map(x=>{
   if(x.img)return `<img class="hwimg" loading="lazy" src="${x.img}" alt="Tarea">`;
   if(x.ans){qn++;if(!ctx)return "";const R=HWA[ctx.k]||{a:{},fb:{}},v=R.a[x.ans]||"",fb=R.fb[x.ans]||"";
-    if(ctx.mode==="edit")return `<label class="hwans"><span>Tu respuesta</span><textarea class="ko hwta" rows="2" data-hk="${ctx.k}" data-q="${x.ans}" placeholder="Escribe aquí tu respuesta">${esc(v)}</textarea></label>`;
-    if(ctx.mode==="prof")return `<div class="hwans prof"><span>답 · ${esc(ctx.who)}</span><div class="hwsa ko">${v?esc(v):`<i class="muted">(빈칸)</i>`}</div><div class="hwfbrow"><button class="chip ${fb==="✓"?"on":""}" data-act="hwOk" data-hk="${ctx.k}" data-q="${x.ans}">✓ 맞음</button><input class="ko hwfb" data-hk="${ctx.k}" data-q="${x.ans}" value="${esc(fb==="✓"?"":fb)}" placeholder="고친 문장이나 코멘트"></div></div>`;
-    return `<div class="hwans ro"><span>Tu respuesta</span><div class="hwsa ko">${v?esc(v):`<i class="muted">Sin respuesta</i>`}</div>${fb?`<div class="hwfbv ${fb==="✓"?"ok":""}"><b>Prof.:</b> ${fb==="✓"?"¡Correcto! ✓":esc(fb)}</div>`:""}</div>`}
+    const qh=x.qt?`<p class="hwl ko hwqt"><b>Pregunta ${esc(x.lab||String(qn))}.</b> ${esc(x.qt)}</p>`:"",lb=x.qt?`Respuesta ${esc(x.lab||String(qn))}`:x.lab?`<b class="hwnum">${esc(x.lab)}.</b> Tu respuesta`:"Tu respuesta";
+    if(ctx.mode==="edit")return qh+`<label class="hwans"><span>${lb}</span><textarea class="ko hwta" rows="2" data-hk="${ctx.k}" data-q="${x.ans}" placeholder="Escribe aquí tu respuesta">${esc(v)}</textarea></label>`;
+    if(ctx.mode==="prof")return qh+`<div class="hwans prof"><span>${x.lab?esc(x.lab)+". ":""}답 · ${esc(ctx.who)}</span><div class="hwsa ko">${v?esc(v):`<i class="muted">(빈칸)</i>`}</div><div class="hwfbrow"><button class="chip ${fb==="✓"?"on":""}" data-act="hwOk" data-hk="${ctx.k}" data-q="${x.ans}">✓ 맞음</button><input class="ko hwfb" data-hk="${ctx.k}" data-q="${x.ans}" value="${esc(fb==="✓"?"":fb)}" placeholder="고친 문장이나 코멘트"></div></div>`;
+    return qh+`<div class="hwans ro"><span>${lb}</span><div class="hwsa ko">${v?esc(v):`<i class="muted">Sin respuesta</i>`}</div>${fb?`<div class="hwfbv ${fb==="✓"?"ok":""}"><b>Prof.:</b> ${fb==="✓"?"¡Correcto! ✓":esc(fb)}</div>`:""}</div>`}
   const k=x.k||"",ko=/[가-힣]/.test(x.t);
   return `<p class="hwl ${k?"hw-"+k:""} ${ko?"ko":""}">${esc(x.t)}</p>`}).join("")}
 function hwBlock(iso,blocks,editable){const k=hwKey(ANA.gid,ANA.name,iso),R=HWA[k]||{st:"pendiente"},due=(blocks[0]||{}).due||"",open=!due||Date.now()<Date.parse(due),canEdit=editable&&live()&&R.st==="pendiente"&&open;
