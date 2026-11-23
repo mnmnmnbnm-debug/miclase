@@ -550,6 +550,27 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .devov .frame{background:#000;border-radius:36px;padding:12px;box-shadow:0 10px 40px rgba(0,0,0,.45);flex:none}
 .devov iframe{display:block;border:0;border-radius:26px;background:var(--bg)}
 .devov .cap{position:fixed;top:60px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;font-weight:700;background:rgba(0,0,0,.55);padding:4px 12px;border-radius:999px}
+
+/* 2026-11-22 평가 반영: 휴대폰 시간표·테마·제안함 */
+.gplans .nt *,.lv,.lvn{word-break:keep-all;overflow-wrap:normal;hyphens:none}
+.lmS{white-space:nowrap}
+@media (max-width:520px){
+ .ngrid{grid-template-columns:44px 1fr 1fr!important;gap:5px!important}
+ .ngrid .nt{font-size:11.5px!important;justify-content:center;text-align:center}
+ .ncell{padding:8px 5px!important}
+ .ncell>b:first-child{font-size:13px;letter-spacing:-.2px;overflow-wrap:normal}
+ .ncell .lvmore{white-space:nowrap;font-size:12px!important;padding:6px 8px!important}
+}
+.ncell,.ncell *{word-break:keep-all;overflow-wrap:anywhere}
+.skinpick button{width:34px!important;height:34px!important}
+.skinpick{gap:8px!important;padding:5px 7px!important}
+.skinpick.inacct{position:static!important;box-shadow:none!important;border:0!important;background:none!important;padding:0!important;justify-content:flex-start;display:flex!important}
+@media (max-width:760px){body[data-r="stu"] .skinpick:not(.inacct){display:none!important}}
+.sugbox textarea{width:100%;min-height:96px;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface);color:var(--ink);resize:vertical;box-sizing:border-box}
+.sugbox .sugcats{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.sugbox .sugcats button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13.5px;min-height:36px}
+.sugbox .sugcats button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.sugbox .sugfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 </style>
 
 <div class="wrap">
@@ -843,18 +864,30 @@ function vProgress(){
     else if(g.off[iso])cells+=`<div class="day off" title="${g.off[iso]}"><b>${d}</b><span>Sin clase</span></div>`;
     else cells+=`<div class="day${iso===TODAY?" today":""}"><b>${d}</b></div>`;
   }
+  if(!S.calOpen&&innerWidth<760)return `<div class="card span2">${head}<button class="btn alt block sm" data-act="calTog" aria-expanded="false">Ver calendario de clases ▾</button></div>`;
   const minM=dParts(g.dates[0]).m,maxM=dParts(g.dates[g.dates.length-1]).y>2026?12:dParts(g.dates[g.dates.length-1]).m;
   return `<div class="card span2">${head}
     <div class="row"><button class="btn sm alt" data-act="calM" data-d="-1" ${mAbs<=minM?"disabled":""} aria-label="Mes anterior">‹</button><b>${MESL[m]} ${y}</b><button class="btn sm alt" data-act="calM" data-d="1" ${mAbs>=maxM?"disabled":""} aria-label="Mes siguiente">›</button></div>
-    <div class="cal">${["Do","Lu","Ma","Mi","Ju","Vi","Sá"].map(x=>`<div class="dow">${x}</div>`).join("")}${cells}</div>${legend}</div>`;
+    ${innerWidth<760?`<button class="btn alt block sm" data-act="calTog" aria-expanded="true">Ocultar calendario ▴</button>`:""}<div class="cal">${["Do","Lu","Ma","Mi","Ju","Vi","Sá"].map(x=>`<div class="dow">${x}</div>`).join("")}${cells}</div>${legend}</div>`;
 }
 /* ---------- STUDENT SCREENS ---------- */
+
+/* Buzón de sugerencias · temporal (2026-11-22 ~ 2026-12-06) */
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="sugTxt"&&S.sug)S.sug.txt=e.target.value});
+const SUG_END="2026-12-06",SUG_CATS=["Clases","App Mi Clase","Horarios","Tareas","Otro"];
+function vSug(){if(!(S.role==="vivo"||S.role==="oyente"))return "";const t=(typeof TODAY==="string"?TODAY:new Date().toISOString().slice(0,10));if(t>SUG_END)return "";
+  const sg=S.sug||(S.sug={cat:"",txt:"",sent:0,busy:false});
+  return `<div class="card span2 sugbox"><div class="row"><h3>Buzón de sugerencias 💬</h3><span class="pill p-gray">Hasta el 6 de dic</span></div>
+  <div class="muted">¿Qué te gustaría que mejoráramos en las clases o en la app? Cuéntanos con confianza, nos ayuda muchísimo.</div>
+  ${sg.sent?`<div class="tip" style="margin-top:8px">¡Gracias! Recibimos tu sugerencia ✨ Si se te ocurre algo más, puedes mandar otra.</div>`:""}
+  <div class="sugcats" role="group" aria-label="Tema">${SUG_CATS.map(c=>`<button type="button" data-act="sugCat" data-c="${c}" aria-pressed="${sg.cat===c}">${c}</button>`).join("")}</div>
+  <textarea id="sugTxt" maxlength="1500" placeholder="Escribe aquí tu sugerencia o lo que te gustaría…">${esc(sg.txt)}</textarea>
+  <div class="sugfoot"><span class="muted" style="font-size:12.5px">Solo lo lee el profesor.</span><button class="btn" data-act="sugSend" ${sg.busy?"disabled":""}>${sg.busy?"Enviando…":"Enviar sugerencia"}</button></div></div>`}
 function vHoy(){
   const a=S.attendance;
   return `
   <div class="row"><h2 class="hihead">${picTag()}¡Hola, ${esc(ANA.name)}! 👋</h2><span class="pill p-a1">${ANA.book}</span></div>
   
-  ${vProgress()}
   <div class="card dark span2">
     <div class="row"><span class="pill" style="background:var(--accent-t);color:#fff">${G().todayIsClass?"HOY":"PRÓXIMA CLASE"}</span><span style="font-size:12.5px;opacity:.8">Clase ${G().cur+1} de ${G().dates.length}</span></div>
     <div class="big ko" style="color:var(--on-stage)">${G().topic[0]}</div>
@@ -862,6 +895,7 @@ function vHoy(){
     <button class="btn block" style="background:var(--on-stage);color:var(--stage)" data-act="enter" ${G().todayIsClass?"":"disabled"}>${!G().todayIsClass?"Se activa 5 min antes de la clase":live()?"Entrar a clase":"Ver clase en vivo"}</button>
     ${a?`<div style="font-size:12.5px;opacity:.85">✓ Asistencia registrada a las ${a.time} · ${a.status}</div>`:`<div style="font-size:12px;opacity:.7">Tu asistencia se registra sola al entrar.</div>`}
   </div>
+  ${vProgress()}
   ${(()=>{const c=CLASSES.find(x=>x.words&&x.words.length);if(!c)return"";const ws=c.words,W=wrongSet(c),rv=S.wRev||(S.wRev=new Set());
     const head=`<div class="row"><h3>Palabras de la clase · Clase ${c.n}</h3><span class="muted ko">${esc(c.ko||"")}</span></div>`;
     if(S.hoyQuiz)return `<div class="card span2">${head}<button class="btn alt block" data-act="hoyQuiz" data-n="${c.n}">← Volver a la lista de palabras</button>${quizBody(c)}</div>`;
@@ -870,6 +904,7 @@ function vHoy(){
       <div class="wlist">${ws.map((w,i)=>{const bad=W.has(w[0]),hk=S.hideKo&&!rv.has("k"+i),he=S.hideEs&&!rv.has("e"+i);
         return `<div class="wrow${bad?" bad":""}"><button class="wko ko${hk?" hid":""}" data-act="${S.hideKo?"wRev":"sayk"}" data-i="k${i}" data-w="${esc(w[0])}">${bad?'<i class="wstar">★</i>':""}${hk?"Toca para ver":esc(w[0])}</button><button class="wes${he?" hid":""}" data-act="wRev" data-i="e${i}">${he?"Toca para ver":esc(m1(w[2]||w[1]||""))}</button></div>`}).join("")}</div>
       <button class="btn block quizbig" data-act="hoyQuiz" data-n="${c.n}">Empezar quiz · ${ws.length} palabras</button></div>`})()}
+  ${vSug()}
   <div class="card">
     <h3>Esta semana</h3>
     <div class="stack">
@@ -1259,6 +1294,7 @@ function vCuenta(){
     <div class="stat"><b>—</b><span>Promedio de quizzes</span></div>
   </div>
   <div class="card"><h3>Avance</h3><div class="li"><span class="muted">Libro</span><span>${ANA.book} · ${ANA.lesson}</span></div><div class="li"><span class="muted">Última clase</span><span>${ANA.last}</span></div><div class="meter"><i style="width:${G().cur/G().dates.length*100}%"></i></div><div class="muted">Clase ${G().cur+1} de ${G().dates.length} del 2026-4 · termina el ${ANA.end}</div></div>
+  <div class="card"><div class="row"><b>Tema de la app</b><div class="skinpick inacct" role="group" aria-label="Elige el tema de la app"><button type="button" data-s="hanji" aria-label="Tema Hanji (claro)" aria-pressed="${(document.documentElement.dataset.skin||"hanji")==="hanji"}"></button><button type="button" data-s="tinta" aria-label="Tema Tinta (oscuro)" aria-pressed="${document.documentElement.dataset.skin==="tinta"}"></button><button type="button" data-s="bermellon" aria-label="Tema Bermellón (rojo)" aria-pressed="${document.documentElement.dataset.skin==="bermellon"}"></button></div></div></div>
   <div class="card soft"><div class="row"><div><b>Siguiente periodo · enero 2027</b><div class="muted">Te avisamos aquí cuando abran las inscripciones</div></div><button class="btn sm" data-act="goEnroll">Inscribirme / Renovar</button></div></div>
   <div class="card span2"><h3>Calificaciones y constancias</h3>${(()=>{const c=(window.__CERTS||[]).find(x=>x.sem==="2026-3");
     const row2026_4=`<div class="sem"><div class="row"><b>Periodo 2026-4</b><span class="pill p-warn">En curso</span></div><div class="muted">El examen final es al terminar el periodo (${ANA.end}). Tu calificación aparecerá aquí.</div></div>`;
@@ -1891,10 +1927,10 @@ function vGNivel(){
 const GUEST_TABS=[["hoy","Inicio"],["clases","Clases"],["prac","Práctica"],["tareas","Tareas"],["nivel","Prueba de nivel"],["planes","Planes"]];
 const STU_TABS=[["hoy","Hoy"],["clases","Clases"],["prac","Práctica"],["tareas","Tareas"],["cuenta","Mi cuenta"]];
 const PROF_TABS=[["panel","오늘"],["stu","학생"],["ins","수강신청"],["priv","1:1"],["tareas","숙제"],["exam","시험"]];
-function render(){
+function render(){try{document.body.dataset.r=(S.role==="vivo"||S.role==="oyente")?"stu":S.role}catch(e){}
   document.querySelectorAll(".roles button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.role===S.role));
   const prof=S.role==="prof";
-  $("#who").innerHTML=prof?`Prof. Héctor<br>관리 화면 <button class="btn sm alt" style="margin-top:4px" data-act="viewAs" data-w="${(()=>{const g=GRP.find(x=>x.st&&x.st.length)||GRP[0];return g.id+"|"+esc((g.st||[])[0]||"")})()}">👀 학생 화면 보기</button>`:S.role==="guest"?(S.gs==="anon"?`<button class="btn sm" data-act="gLogin">Entrar con Google</button>`:S.gs==="ex"?`Ana (ejemplo)<br><span class="pill gpill" style="margin-top:3px">Plan no activo</span>`:`invitado@gmail.com (ejemplo)<br><span class="pill gpill" style="margin-top:3px">Modo invitado</span>`):`<span class="pill planpill ${S.role}" style="margin-top:3px">${S.role==="vivo"?"Plan En vivo":"Plan Oyente"}</span>`;
+  $("#who").innerHTML=prof?`Prof. Héctor<br>관리 화면 <button class="btn sm alt" style="margin-top:4px" data-act="viewAs" data-w="${(()=>{const g=GRP.find(x=>x.st&&x.st.length)||GRP[0];return g.id+"|"+esc((g.st||[])[0]||"")})()}">👀 학생 화면 보기</button>`:S.role==="guest"?(S.gs==="anon"?`<button class="btn sm" data-act="gLogin">Entrar con Google</button>`:S.gs==="ex"?`Ana (ejemplo)<br><span class="pill gpill" style="margin-top:3px">Plan no activo</span>`:`invitado@gmail.com (ejemplo)<br><span class="pill gpill" style="margin-top:3px">Modo invitado</span>`):`<span class="pill planpill ${S.role}" style="margin-top:3px;white-space:nowrap">${S.role==="vivo"?"En vivo":"Oyente"}</span>`;
   const tabs=prof?PROF_TABS:S.role==="guest"?GUEST_TABS:STU_TABS;
   const cur=prof?S.profTab:S.tab;
   $("#tabs").style.setProperty("--n",tabs.length);
@@ -1942,6 +1978,10 @@ document.addEventListener("click",e=>{
     case "saye":say(EXPR[+b.dataset.i][0]);return;
     case "qa":{const i=+b.dataset.i;if(S.quizAns[i])return;S.quizAns[i]=b.dataset.o;if(S.quiz[i]&&b.dataset.o===S.quiz[i].ans)say(S.quiz[i].k);break}
     case "qnext":S.qi=(S.qi||0)+1;if(S.qi>=S.quiz.length){S.quizDone=true;S.qi=0;const c=CLASSES.find(x=>x.n===S.quizFor);if(c){const o=lsGet("mc_qdone",{});o[(c.sg||"")+"|"+(c.iso||c.n)]=Date.now();lsSet("mc_qdone",o)}if(c)wrongSave(c,S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans).map(q=>q.k),S.quiz.filter((q,i)=>S.quizAns[i]===q.ans).map(q=>q.k))}break;
+    case "calTog":S.calOpen=!S.calOpen;break;
+    case "sugCat":{const sg=S.sug;const ta=document.getElementById("sugTxt");if(ta)sg.txt=ta.value;sg.cat=sg.cat===b.dataset.c?"":b.dataset.c;break}
+    case "sugSend":{const sg=S.sug,ta=document.getElementById("sugTxt"),v=((ta&&ta.value)||"").trim();if(v.length<3){toast("Escribe tu sugerencia antes de enviar.");return}
+      sg.txt=v;sg.busy=true;render();api("sugerencia",{txt:v,cat:sg.cat||"Otro",grupo:ANA.group||""}).then(()=>{sg.busy=false;sg.sent++;sg.txt="";sg.cat="";render()}).catch(()=>{sg.busy=false;render();toast("No se pudo enviar. Revisa tu conexión e inténtalo otra vez.")});return}
     case "wHide":{const k=b.dataset.k==="ko"?"hideKo":"hideEs";S[k]=!S[k];S.wRev=new Set();break}
     case "wRev":{const i=b.dataset.i;if(S.wRev.has(i))S.wRev.delete(i);else S.wRev.add(i);if(i[0]==="k"&&S.wRev.has(i))say(b.dataset.w);break}
     case "qbad":{const bad=S.quiz.filter((q,i)=>S.quizAns[i]!==q.ans);const ws=((CLASSES.find(x=>x.n===S.quizFor)||PC()).words).filter(w=>w[0]&&w[2]);S.quiz=shuffle(bad).map(q=>({k:q.k,ans:q.ans,opts:shuffle([q.ans,...shuffle(ws.filter(w=>m1(w[2])!==q.ans)).slice(0,3).map(w=>m1(w[2]))])}));S.quizAns={};S.quizDone=false;S.qi=0;break}
@@ -2092,7 +2132,7 @@ let TOK=null,ME=null,HWLIST=[];
 const PREV_GUEST=/[?&]as=guest/.test(location.search);try{const t=JSON.parse(localStorage.getItem("mc_tok")||"null");if(!PREV_GUEST&&t&&t.exp>Date.now()+60000)TOK=t.v}catch(e){}
 HWA={};hwaSave=()=>{};
 function api(a,p){
-  if(isAdm()&&/^(saveAnswer|submitHw|placement|enroll|tema)$/.test(a)){try{toast("관리자 미리보기: 학생 기록에 저장하지 않아요")}catch(e){}return Promise.resolve({})}
+  if(isAdm()&&/^(saveAnswer|submitHw|placement|enroll|tema|sugerencia)$/.test(a)){try{toast("관리자 미리보기: 학생 기록에 저장하지 않아요")}catch(e){}return Promise.resolve({})}
   return fetch(API,{method:"POST",body:JSON.stringify(Object.assign({a,t:TOK},p||{}))}).then(r=>r.json()).then(j=>{
     if(j.me)ME=j.me;if(!j.ok)throw new Error(j.error||"error");return j.data});
 }
