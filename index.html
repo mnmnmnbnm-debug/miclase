@@ -574,6 +574,23 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .sugbox .sugfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}@media (max-width:520px){.grid3{grid-template-columns:1fr}}
 .accrow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.accrow small{display:block;color:var(--muted);font-size:12px}.accr{text-align:right}.accr b.bad{color:var(--accent-t)}
+/* 2026-11-23: 아래 메뉴(탭 바)를 휴대폰에서 항상 화면 아래에 고정 */
+@container app (max-width:699px){
+ .app{overflow:clip}
+ .tabs{position:sticky;bottom:0;z-index:30;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -6px 16px rgba(0,0,0,.10)}
+}
+/* 2026-11-23: Práctica — 수업 선택 카드가 한 화면에 여러 개 보이도록 */
+.pick{scroll-snap-type:x proximity}
+.pick button{flex:0 0 46%;max-width:46%!important;min-width:0;scroll-snap-align:start}
+.pick button b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13.5px;line-height:1.3}
+/* 2026-11-23: Práctica — preguntas de la clase todas en una pantalla */
+.qlist .qli{border-top:1px solid var(--line);padding:12px 0 4px}
+.qlist .qlh{display:flex;gap:10px;align-items:flex-start}
+.qlist .qn{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;margin-top:2px}
+.qlist .qlt{flex:1;min-width:0}
+.qlist .qlq{font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all}
+.qlist .qlbtn{margin:8px 0 0 36px}
+.qlist .ans{margin:8px 0 0 36px}
 </style>
 
 <div class="wrap">
@@ -1176,27 +1193,15 @@ function qqStart(c,only){
 function qaPractice(c){
   const qs=c.qa||QA[c.n]||[];
   if(!qs.length){const prev=CLASSES.find(x=>x.n!==c.n&&((x.qa||QA[x.n]||[]).length));return `<div class="card wide"><h3>Preguntas y respuestas</h3><div class="muted">Las preguntas de esta clase estarán listas muy pronto (normalmente el mismo día de la clase).</div>${prev?`<button class="btn" style="margin-top:10px" data-act="pcls" data-n="${prev.n}">Practicar la Clase ${prev.n} · <span class="ko">${esc(prev.ko||"")}</span></button>`:""}</div>`}
-  if(!S.qq||S.qq.n!==c.n)qqStart(c);
-  const Q=S.qq,wk=lsGet(QWK_K,{}),wn=wk[weekId()]||0,goal=`<span class="pill p-gray">Esta semana: ${Math.min(wn,3)}/3</span>`;
-  if(Q.done){const ids=Object.keys(Q.res).map(Number),ok=ids.filter(i=>Q.res[i]==="ok").length,hard=ids.filter(i=>Q.res[i]!=="ok");
-    return `<div class="card wide qq"><div class="row"><h3>¡Terminaste!</h3>${goal}</div>
-      <div class="big">${ok} / ${ids.length}</div><div class="muted">preguntas que ya sabes responder</div>
-      ${hard.length?`<div class="stack" style="margin-top:8px">${hard.map(i=>`<div class="arow"><div class="ko">${esc(qs[i].q)}</div><span class="pill ${Q.res[i]==="casi"?"p-warn":"p-gray"}">${Q.res[i]==="casi"?"Casi":"No"}</span></div>`).join("")}</div>`:""}
-      <div class="row" style="justify-content:flex-start;gap:8px;margin-top:10px">${hard.length?`<button class="btn" data-act="qqHard">Repasar las difíciles (${hard.length})</button>`:""}<button class="btn alt" data-act="qqRestart">Empezar otra vez</button></div></div>`}
-  const i=Q.order[Q.pos],x=qs[i],N=Q.order.length;
-  const canRec=!!(navigator.mediaDevices&&window.MediaRecorder);
-  return `<div class="card wide qq"><div class="row"><h3>Pregunta ${Q.pos+1} / ${N}</h3>${goal}</div>
-    <div class="qbar"><i style="width:${Math.round(Q.pos/N*100)}%"></i></div>
-    <div class="qbig ko" style="font-size:22px">${esc(x.q)}</div>
-    ${x.qe?`<div class="muted" style="text-align:center">${esc(x.qe)}</div>`:""}
-    <div class="qqtools"><button class="btn alt qqlisten" data-act="sayk" data-w="${esc(x.q)}">${IC.spk} Escuchar</button><div class="qqmic">${canRec?`<button class="btn block quizbig ${QREC.on?"rec":""}" data-act="qqRec">${QREC.on?"■ Terminar grabación":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Responde en voz alta`}</button>
-      ${QREC.url&&!QREC.on?`<audio controls src="${QREC.url}" style="width:100%;margin-top:6px"></audio><div class="muted" style="font-size:12px">Tu grabación se queda solo en este dispositivo.</div>`:""}`
-      :`<div class="quizbig qqsay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Responde en voz alta</div>`}</div></div>
-    <div class="qqlab">Cómo responder</div>
-    <div class="ans">${x.a.map(a=>`<div class="arow"><div><div class="ko ak">${esc(a[0])}</div><div class="muted">${esc(a[1]||"")}</div></div><button class="say" data-act="sayk" data-w="${esc(a[0])}" aria-label="Escuchar respuesta">${IC.spk}</button></div>`).join("")||`<div class="muted">Respuesta libre.</div>`}</div>
+  const wk=lsGet(QWK_K,{}),wn=wk[weekId()]||0,goal=`<span class="pill p-gray">Esta semana: ${Math.min(wn,3)}/3</span>`;
+  if(!S.qaOpen)S.qaOpen=new Set();
+  return `<div class="card wide qq qlist"><div class="row"><h3>Preguntas · Clase ${c.n} (${qs.length})</h3>${goal}</div>
+    <div class="muted" style="font-size:13px">Lee cada pregunta y respóndela en voz alta. Luego toca «Ver respuesta» para revisar.</div>
+    ${qs.map((x,i)=>{const k=c.n+"|"+i,op=S.qaOpen.has(k);return `<div class="qli"><div class="qlh"><span class="qn">${i+1}</span><div class="qlt"><div class="ko qlq">${esc(x.q)}</div>${x.qe?`<div class="muted">${esc(x.qe)}</div>`:""}</div><button class="say" data-act="sayk" data-w="${esc(x.q)}" aria-label="Escuchar">${IC.spk}</button></div>
+      <button class="btn sm alt qlbtn" data-act="qlTog" data-k="${k}">${op?"Ocultar respuesta":"Ver respuesta"}</button>
+      ${op?`<div class="ans">${(x.a||[]).map(a=>`<div class="arow"><div><div class="ko ak">${esc(a[0])}</div><div class="muted">${esc(a[1]||"")}</div></div><button class="say" data-act="sayk" data-w="${esc(a[0])}" aria-label="Escuchar respuesta">${IC.spk}</button></div>`).join("")||`<div class="muted">Respuesta libre.</div>`}</div>`:""}</div>`}).join("")}
     <div class="qqtip">Dilo con tu información: cambia el nombre, el lugar o la hora por los tuyos.</div>
-    <div class="muted" style="text-align:center;margin-top:4px;font-size:13px">¿Cómo te fue?</div>
-    <div class="qqrate"><button class="btn" data-act="qqRate" data-r="ok">Lo sabía</button><button class="btn alt" data-act="qqRate" data-r="casi">Casi</button><button class="btn alt" data-act="qqRate" data-r="no">No</button></div>
+    <button class="btn block" style="margin-top:10px" data-act="qlDone">Terminé de practicar ✓</button>
   </div>`;
 }
 function vPrac(){
@@ -2024,6 +2029,8 @@ document.addEventListener("click",e=>{
       break}
     case "qqHard":{const Q=S.qq;qqStart(PC(),Object.keys(Q.res).map(Number).filter(i=>Q.res[i]!=="ok"));break}
     case "qqRestart":qqStart(PC());break;
+    case "qlTog":{if(!S.qaOpen)S.qaOpen=new Set();const k=b.dataset.k;S.qaOpen.has(k)?S.qaOpen.delete(k):S.qaOpen.add(k);break}
+    case "qlDone":{const c=PC(),wk=lsGet(QWK_K,{}),w=weekId(),dk="mc_qldone",dd=lsGet(dk,{}),key=w+"|"+c.n;if(!dd[key]){dd[key]=1;lsSet(dk,dd);wk[w]=(wk[w]||0)+1;lsSet(QWK_K,wk)}try{toast("¡Muy bien! Práctica registrada ✓")}catch(e){}break}
     case "qaOpen":{const i=+b.dataset.i;if(S.qaOpen.has(i))S.qaOpen.delete(i);else S.qaOpen.add(i);break}
     case "qaAll":{const n=(PC().qa||QA[PC().n]||[]).length;S.qaOpen=S.qaOpen.size===n?new Set():new Set([...Array(n).keys()]);break}
     case "retry":{const w=(CLASSES.find(x=>x.n===S.quizFor)||PC()).words;S.quiz=makeQuiz(w,w.length);S.quizAns={};S.quizDone=false;S.qi=0;break}
@@ -2329,7 +2336,7 @@ start();
     if(ov){ov.remove();ov=null}if(dev==="d"&&view==="prof")return;
     const base=location.href.split("#")[0].split("?")[0]+(view==="guest"?"?as=guest":view==="stu"?"?as=student":"?as=prof")+"&v="+Date.now();
     let w,h,cap;if(dev==="d"){w=Math.min(1280,window.innerWidth-40);h=window.innerHeight-130;cap="PC"}else{[w,h,cap]=D[dev]}
-    const sc=dev==="d"?1:Math.min(1,(window.innerHeight-130)/(h+24));ov=document.createElement("div");ov.className="devov";
+    const sc=dev==="d"?1:Math.min(1,(window.innerHeight-190)/(h+24));ov=document.createElement("div");ov.className="devov";
     ov.innerHTML='<div class="cap">'+cap+' · '+(view==="guest"?"Invitado 화면":view==="stu"?"학생 화면":"선생님 화면")+' · 미리보기</div><div class="frame" style="transform:scale('+sc+');transform-origin:top center;margin-bottom:'+(-(h+24)*(1-sc))+'px"><iframe src="'+base+'" style="width:'+w+'px;height:'+h+'px" title="'+cap+'"></iframe></div>';document.body.appendChild(ov)};
   box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.d)dev=b.dataset.d;if(b.dataset.v)view=b.dataset.v;draw()});
   draw();setInterval(()=>{const prof=typeof S!=="undefined"&&S&&S.role==="prof";box.hidden=!prof;if(!prof&&ov){dev="d";view="prof";draw()}},1000)})();
