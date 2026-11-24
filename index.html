@@ -524,7 +524,7 @@ i.pill{font-style:normal}
 .qq .qqtip{padding:7px 10px;margin-top:6px;font-size:13px}
 .qq .qqrate .btn{padding-top:10px;padding-bottom:10px}
 .pick button.pnoq{opacity:.55}
-.hwnum{font-size:1.15em;margin-right:4px}.hwqt{margin:12px 0 4px}
+.hwnum{font-size:1.15em;margin-right:4px}.hegrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start}@media(max-width:900px){.hegrid{grid-template-columns:1fr}}.hecard{border:1.5px dashed var(--accent);border-radius:14px;padding:10px 12px;margin:8px 0;display:grid;gap:6px}.hecard label{display:grid;gap:3px;font-size:12.5px;color:var(--ink2)}.hecard input,.hecard textarea{font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);color:var(--ink)}.headd{margin:6px 0;width:100%}.hwchk{display:grid;gap:6px}.hwchk label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);cursor:pointer}.hwchk input{width:20px;height:20px;flex:0 0 auto;margin-top:1px;accent-color:var(--accent)}.hwqt{margin:12px 0 4px}
 .qqrate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}.qqrate .btn{justify-content:center;padding-left:6px;padding-right:6px}.qqtip{background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px;color:var(--ink)}
 .skinpick{position:fixed;z-index:40;top:calc(10px + env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;padding:5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .skinpick button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);padding:0}
@@ -551,6 +551,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .devov{position:fixed;inset:0;z-index:39;background:color-mix(in srgb,var(--bg) 70%,#000);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:100px 16px 24px}
 .devov .frame{background:#000;border-radius:36px;padding:12px;box-shadow:0 10px 40px rgba(0,0,0,.45);flex:none}
 .devov iframe{display:block;border:0;border-radius:26px;background:var(--bg)}
+.devov.zoom{padding:12px 16px}.devov.zoom .cap{display:none}.devpick .dpzoom{grid-template-columns:1fr}.devpick .dpzoom[hidden]{display:none}
 .devov .cap{position:fixed;top:60px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;font-weight:700;background:rgba(0,0,0,.55);padding:4px 12px;border-radius:999px}
 
 /* 2026-11-22 평가 반영: 휴대폰 시간표·테마·제안함 */
@@ -1241,7 +1242,9 @@ const hwRec=k=>HWA[k]||(HWA[k]={a:{},fb:{},st:"pendiente",note:""});
 function hwItems(items,ctx){let qn=0;return items.map(x=>{
   if(x.img)return `<img class="hwimg" loading="lazy" src="${x.img}" alt="Tarea">`;
   if(x.ans){qn++;if(!ctx)return "";const R=HWA[ctx.k]||{a:{},fb:{}},v=R.a[x.ans]||"",fb=R.fb[x.ans]||"";
-    const qh=x.qt?`<p class="hwl ko hwqt"><b>Pregunta ${esc(x.lab||String(qn))}.</b> ${esc(x.qt)}</p>`:"",lb=x.qt?`Respuesta ${esc(x.lab||String(qn))}`:x.lab?`<b class="hwnum">${esc(x.lab)}.</b> Tu respuesta`:"Tu respuesta";
+    const L0=x.lab?(/[.)]$/.test(x.lab)?x.lab:x.lab+"."):"";
+    const qh=x.qt?`<p class="hwl ko hwqt"><b>${esc(L0||qn+".")}</b> ${esc(x.qt)}</p>`:"",lb=x.qt?(x.opts?"Marca con ✓ lo que has hecho":"Tu respuesta"):L0?`<b class="hwnum">${esc(L0)}</b> Tu respuesta`:"Tu respuesta";
+    if(ctx.mode==="edit"&&x.opts&&x.opts.length){const sel=v.split("\n");return qh+`<div class="hwans"><span>${lb}</span><div class="hwchk">${x.opts.map(o=>`<label class="ko"><input type="checkbox" class="hwcb" data-hk="${ctx.k}" data-q="${x.ans}" value="${esc(o)}" ${sel.includes(o)?"checked":""}> <span>${esc(o)}</span></label>`).join("")}</div></div>`}
     if(ctx.mode==="edit")return qh+`<label class="hwans"><span>${lb}</span><textarea class="ko hwta" rows="2" data-hk="${ctx.k}" data-q="${x.ans}" placeholder="Escribe aquí tu respuesta">${esc(v)}</textarea></label>`;
     if(ctx.mode==="prof")return qh+`<div class="hwans prof"><span>${x.lab?esc(x.lab)+". ":""}답 · ${esc(ctx.who)}</span><div class="hwsa ko">${v?esc(v):`<i class="muted">(빈칸)</i>`}</div><div class="hwfbrow"><button class="chip ${fb==="✓"?"on":""}" data-act="hwOk" data-hk="${ctx.k}" data-q="${x.ans}">✓ 맞음</button><input class="ko hwfb" data-hk="${ctx.k}" data-q="${x.ans}" value="${esc(fb==="✓"?"":fb)}" placeholder="고친 문장이나 코멘트"></div></div>`;
     return qh+`<div class="hwans ro"><span>${lb}</span><div class="hwsa ko">${v?esc(v):`<i class="muted">Sin respuesta</i>`}</div>${fb?`<div class="hwfbv ${fb==="✓"?"ok":""}"><b>Prof.:</b> ${fb==="✓"?"¡Correcto! ✓":esc(fb)}</div>`:""}</div>`}
@@ -1533,6 +1536,7 @@ function vIns(){
   <div class="card"><h3>반 목록 (2026-4)</h3><div class="list">${GROUPS.map(g=>`<div class="li"><span>${g.name}</span><span class="pill p-gray">${g.seats==null?"정원 미설정":g.seats?`${g.seats}자리 남음`:"마감"}</span></div>`).join("")}</div></div>`;
 }
 function vHwReview(){
+  if(S.hwMode==="edit")return vHwEdit();
   const sub=(HWLIST||[]).map(x=>({k:x.k,gid:x.gid,name:x.name||x.email,iso:x.iso,R:Object.assign({a:{},fb:{},st:x.st},HWA[x.k]||{},{st:(HWA[x.k]&&HWA[x.k].st)||x.st})})).sort((a,b)=>(a.R.st==="revisada")-(b.R.st==="revisada")||b.iso.localeCompare(a.iso));
   const pend=sub.filter(x=>x.R.st==="entregada").length;
   const one=S.hwOpen&&sub.find(x=>x.k===S.hwOpen);
@@ -1542,11 +1546,58 @@ function vHwReview(){
     <div class="card span2"><div class="hwbox">${blocks.map(b=>hwItems(b.items,{k:one.k,mode:"prof",who:one.name})).join("")}</div>
     <label class="hwans"><span>전체 코멘트 (학생에게 보여요)</span><textarea class="ko" id="hwNote" rows="2" placeholder="¡Muy bien! Repasa las respuestas marcadas.">${esc(one.R.note||"")}</textarea></label>
     <div class="row"><span class="muted">문제마다 ✓ 맞음 또는 고친 문장을 쓰고 보내세요.</span><button class="btn sm" data-act="hwSendFb" data-hk="${one.k}">${one.R.st==="revisada"?"피드백 다시 보내기":"피드백 보내기"}</button></div></div>`}
-  return `<h2>숙제 확인</h2>
+  return `<div class="seg"><button data-act="hwMode" data-m="sub" aria-pressed="true">제출 확인</button><button data-act="hwMode" data-m="edit">숙제 검수</button></div><h2>숙제 확인</h2>
   <div class="card span2"><div class="row"><h3>제출된 숙제</h3><span class="pill ${pend?"p-warn":"p-ok"}">확인 필요 ${pend}</span></div>
   ${sub.length?`<div class="list">${sub.map(x=>{const g=GRP.find(y=>y.id===x.gid)||{name:x.gid},n=Object.values(x.R.a).filter(v=>v&&v.trim()).length;return `<button class="li hwli" data-act="hwOpen" data-hk="${x.k}"><div><b>${esc(x.name)}</b> <span class="muted">· ${esc(g.name)} · ${x.iso.slice(5).replace("-","/")} 숙제</span><div class="muted" style="font-size:12.5px">답 ${n}개</div></div>${x.R.st==="revisada"?`<span class="pill p-ok">✓ 피드백 완료</span>`:`<span class="pill p-warn">확인 필요</span>`}</button>`}).join("")}</div>`:`<div class="muted">아직 제출된 숙제가 없어요. (시안: 학생 화면 Ana › Tareas에서 답을 쓰고 "Entregar tarea"를 누르면 여기에 나와요.)</div>`}
   <div class="note">학생이 문제 밑 칸에 쓴 답이 문제와 함께 보여요. 문제마다 ✓ 또는 코멘트를 달고 보내면 학생 Tareas에 바로 보여요.</div></div>`;
 }
+/* ===== 숙제 검수 (선생님): 자동으로 만든 답 칸을 고치고 이유를 남김 → HwEdit 시트 ===== */
+let HWSID={};
+const heClone=o=>JSON.parse(JSON.stringify(o));
+function vHwEdit(){
+  const gs=GRP.filter(g=>HWD[g.id]&&Object.keys(HWD[g.id]).length),E=window.__HWE||{};
+  if(!S.heG||!HWD[S.heG])S.heG=(gs[0]||{}).id;
+  const gid=S.heG,sid=HWSID[gid]||gid,H=HWD[gid]||{},isos=Object.keys(H).sort().reverse();
+  const seg=`<div class="seg"><button data-act="hwMode" data-m="sub">제출 확인</button><button data-act="hwMode" data-m="edit" aria-pressed="true">숙제 검수</button></div>`;
+  if(!S.heIso){
+    return `${seg}<h2>숙제 검수</h2><div class="card span2">
+    <div class="row"><select id="heG" class="ko">${gs.map(g=>`<option value="${g.id}" ${g.id===gid?"selected":""}>${esc(g.name)}</option>`).join("")}</select><span class="muted">학생에게 보이는 답 칸을 확인하고 고쳐요</span></div>
+    <div class="list">${isos.map(iso=>{const bl=H[iso]||[],nA=bl.reduce((a,b)=>a+(b.items||[]).filter(x=>x.ans).length,0),nI=bl.reduce((a,b)=>a+(b.items||[]).filter(x=>x.img).length,0),e=E[sid+"|"+iso];
+      return `<button class="li hwli" data-act="heOpen" data-iso="${iso}"><div><b>${iso.slice(5).replace("-","/")} 숙제</b><div class="muted" style="font-size:12.5px">사진 ${nI} · 답 칸 ${nA}</div></div>${e?`<span class="pill p-ok">✎ 수정됨</span>`:`<span class="pill p-gray">자동</span>`}</button>`}).join("")||`<div class="muted">숙제가 없어요.</div>`}</div>
+    <div class="note">고친 내용과 이유는 「Mi Clase · DB › HwEdit」에 쌓이고, 그걸 바탕으로 자동 규칙을 고쳐요.</div></div>`}
+  const iso=S.heIso,e=E[sid+"|"+iso];
+  if(!S.heDraft)S.heDraft=heClone((H[iso]||[]).map(b=>b.items||[]));
+  const D=S.heDraft;
+  const slot=(x,bi,ii)=>`<div class="hecard"><div class="row"><b>답 칸</b><span><button class="btn sm alt" data-act="heMv" data-b="${bi}" data-i="${ii}" data-d="-1">↑</button> <button class="btn sm alt" data-act="heMv" data-b="${bi}" data-i="${ii}" data-d="1">↓</button> <button class="btn sm alt" data-act="heDel" data-b="${bi}" data-i="${ii}">삭제</button></span></div>
+    <label>번호 <input class="ko" data-he="lab" data-b="${bi}" data-i="${ii}" value="${esc(x.lab||"")}" placeholder="예: 2) 또는 2."></label>
+    <label>질문 (비우면 번호와 칸만 보여요) <textarea class="ko" rows="2" data-he="qt" data-b="${bi}" data-i="${ii}">${esc(x.qt||"")}</textarea></label>
+    <label>체크 항목 (한 줄에 하나 · 비우면 글로 답하는 칸) <textarea class="ko" rows="2" data-he="opts" data-b="${bi}" data-i="${ii}">${esc((x.opts||[]).join("\n"))}</textarea></label></div>`;
+  const add=(bi,ii)=>`<button class="btn sm alt headd" data-act="heAdd" data-b="${bi}" data-i="${ii}">+ 여기에 답 칸 추가</button>`;
+  const body=D.map((items,bi)=>items.map((x,ii)=>x.img?`<img class="hwimg" src="${x.img}" alt="">${add(bi,ii)}`:x.ans?slot(x,bi,ii):`<p class="hwl ko muted">${esc(x.t||"")}</p>`).join("")+add(bi,items.length-1)).join("<hr>");
+  return `${seg}<div class="row"><button class="link" data-act="heClose">← 숙제 목록</button>${e?`<span class="pill p-ok">✎ 수정됨 · ${esc(e.fecha||"")}</span>`:""}</div>
+  <h2>${esc((GRP.find(g=>g.id===gid)||{}).name||gid)} · ${iso.slice(5).replace("-","/")} 숙제</h2>
+  <div class="hegrid"><div class="card">${body}
+    <label class="hwans"><span>고친 이유 (규칙 개선용, 예: "1)은 보기 예제라 칸 필요 없음")</span><textarea id="heNota" class="ko" rows="2">${esc(S.heNota!=null?S.heNota:(e&&e.nota)||"")}</textarea></label>
+    <div class="row"><span>${e?`<button class="btn sm alt" data-act="heReset">자동 결과로 되돌리기</button>`:""}</span><button class="btn" data-act="heSave">저장하고 학생에게 반영</button></div></div>
+  <div class="card"><h3>학생 화면 미리보기</h3><div class="hwbox">${D.map(items=>hwItems(items,{k:"__prev",mode:"ro"})).join("")}</div></div></div>`;
+}
+document.addEventListener("input",e=>{const t=e.target;if(!t.dataset||!t.dataset.he||!S.heDraft)return;const x=S.heDraft[+t.dataset.b][+t.dataset.i];const f=t.dataset.he;
+  if(f==="opts"){const o=t.value.split("\n").map(s=>s.trim()).filter(Boolean);if(o.length)x.opts=o;else delete x.opts}else{if(t.value.trim())x[f]=t.value.trim();else delete x[f]}
+  clearTimeout(window.__heT);window.__heT=setTimeout(()=>{const sy=scrollY,a=document.activeElement,sel=a&&a.dataset&&a.dataset.he?[a.dataset.he,a.dataset.b,a.dataset.i,a.selectionStart]:null;S.heNota=($("#heNota")||{}).value;render();scrollTo(0,sy);if(sel){const n=document.querySelector(`[data-he="${sel[0]}"][data-b="${sel[1]}"][data-i="${sel[2]}"]`);if(n){n.focus();try{n.setSelectionRange(sel[3],sel[3])}catch(_){}}}},700)});
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="heG"){S.heG=e.target.value;S.heIso=null;S.heDraft=null;render()}});
+function heAct(a,b){const D=S.heDraft,bi=+b.dataset.b,ii=+b.dataset.i;S.heNota=($("#heNota")||{}).value;
+  if(a==="heOpen"){S.heIso=b.dataset.iso;S.heDraft=null;S.heNota=null;return true}
+  if(a==="heClose"){S.heIso=null;S.heDraft=null;S.heNota=null;return true}
+  if(a==="hwMode"){S.hwMode=b.dataset.m;S.hwOpen=null;return true}
+  if(a==="heAdd"){D[bi].splice(ii+1,0,{ans:"new",lab:""});return true}
+  if(a==="heDel"){D[bi].splice(ii,1);return true}
+  if(a==="heMv"){const j=ii+(+b.dataset.d);if(j<0||j>=D[bi].length)return true;const t=D[bi][ii];D[bi][ii]=D[bi][j];D[bi][j]=t;return true}
+  if(a==="heSave"){const gid=S.heG,iso=S.heIso,nota=S.heNota||"";if(!nota.trim()&&!confirmNoNote()){}
+    b.disabled=true;b.textContent="저장 중…";api("hwEditSave",{g:HWSID[gid]||gid,iso,blocks:D,nota}).then(d=>{(HWD[gid][iso]||[]).forEach((bl,i)=>{if(d.blocks[i])bl.items=d.blocks[i]});(window.__HWE=window.__HWE||{})[(HWSID[gid]||gid)+"|"+iso]={fecha:"방금",nota};S.heDraft=null;toast("저장했어요 · 학생 화면에 반영됐어요");render()}).catch(er=>{toast("저장 실패: "+er.message);b.disabled=false;b.textContent="저장하고 학생에게 반영"});return false}
+  if(a==="heReset"){const gid=S.heG,iso=S.heIso;api("hwEditReset",{g:HWSID[gid]||gid,iso}).then(d=>{if(d.blocks)(HWD[gid][iso]||[]).forEach((bl,i)=>{if(d.blocks[i])bl.items=d.blocks[i]});delete (window.__HWE||{})[(HWSID[gid]||gid)+"|"+iso];S.heDraft=null;S.heNota=null;toast("자동 결과로 되돌렸어요");render()});return false}
+  return false}
+function confirmNoNote(){return true}
+
 function vGen(){
   return `<h2>시험 자동 생성</h2>
   <div class="card">
@@ -2041,6 +2092,7 @@ document.addEventListener("click",e=>{
     case "hwSubmit":{const R=hwRec(b.dataset.hk);if(!Object.values(R.a).some(v=>v&&v.trim())){toast("Escribe al menos una respuesta");return}const iso=b.dataset.hk.split("|").pop();flushAns().then(()=>api("submitHw",{iso})).then(()=>{R.st="entregada";render();toast("Tarea entregada")}).catch(()=>toast("No se pudo entregar. Revisa tu conexión."));return}
     case "hwOpen":{const k=b.dataset.hk;api("hwOpen",{k}).then(d=>{HWA[k]=Object.assign(HWA[k]||{},{a:d.a,fb:d.fb,note:d.note,st:d.st});S.hwOpen=k;render()});return}
     case "hwClose":S.hwOpen=null;break;
+    case "hwMode":case "heOpen":case "heClose":case "heAdd":case "heDel":case "heMv":case "heSave":case "heReset":if(!heAct(a,b))return;break;
     case "hwOk":{const R=hwRec(b.dataset.hk);R.fb[b.dataset.q]=R.fb[b.dataset.q]==="✓"?"":"✓";hwaSave();break}
     case "hwSendFb":{const k=b.dataset.hk,R=hwRec(k);R.note=($("#hwNote")||{}).value||"";api("hwFeedback",{k,fb:R.fb,note:R.note}).then(()=>{R.st="revisada";const x=(HWLIST||[]).find(y=>y.k===k);if(x)x.st="revisada";render();toast("피드백을 보냈어요")}).catch(()=>toast("보내기 실패"));return}
     case "submitHw":{const v=($("#hwIn")||{}).value||"";if(v.trim().length<4){toast("Escribe tu respuesta antes de entregar");return}S.hw.text=v.trim();S.hw.status="entregada";toast("Tarea entregada");break}
@@ -2150,6 +2202,7 @@ document.addEventListener("submit",e=>{
   if(f==="aviso"){const v=$("#avIn").value.trim();if(!v){toast("공지 내용을 써 주세요");return}const to=S.avT||avNext();S.avisos.unshift({t:v,d:"Ahora",to});S.avT=null;toast(`${avLabel(to)}에 올렸어요 · ${avHint(to).replace("보여요","보여요")}`);render()}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#lvmodal").hidden)lvModal(null)});
+document.addEventListener("change",e=>{const t=e.target;if(!t.classList||!t.classList.contains("hwcb"))return;const box=t.closest(".hwchk"),val=[...box.querySelectorAll("input.hwcb:checked")].map(i=>i.value).join("\n"),R=hwRec(t.dataset.hk);R.a[t.dataset.q]=val;queueAns(t.dataset.hk,t.dataset.q,val)});
 document.addEventListener("input",e=>{const t=e.target;if(t.classList&&(t.classList.contains("hwta")||t.classList.contains("hwfb"))){const R=hwRec(t.dataset.hk);(t.classList.contains("hwta")?R.a:R.fb)[t.dataset.q]=t.value;if(t.classList.contains("hwta"))queueAns(t.dataset.hk,t.dataset.q,t.value);const f=t.closest(".card")&&t.closest(".card").querySelector(".hwfoot .muted");if(f&&t.classList.contains("hwta")){const c=t.closest(".card"),all=c.querySelectorAll(".hwta"),n=[...all].filter(z=>z.value.trim()).length;f.textContent=n+" de "+all.length+" respondidas · se guarda solo"}return}if(t.classList&&t.classList.contains("pltxt")){PL.w[t.dataset.wi]=t.value;plSave()}});
 document.addEventListener("change",e=>{if(e.target.id==="gsSel"){S.gs=e.target.value;S.role="guest";S.tab="hoy";S.enroll.step=0;render();return}if(e.target.id==="tzSel"){S.tz=e.target.value||null;applyWho();render();return}if(e.target.id==="whoSel"){const [g,...n]=e.target.value.split("|");S.who={g,n:n.join("|")};S.tab="hoy";S.inClass=false;applyWho();render();return}if(e.target.id==="avTo"){S.avT=e.target.value;$("#avBtn").textContent=avLabel(S.avT)+"에 올리기";$("#avHint").textContent=avHint(S.avT);return}if(e.target.id==="pDur"){S.priv.dur=+e.target.value;render();return}if(e.target.id==="pCap"){S.priv.cap=+e.target.value;render();return}const m={fP:"plan",fS:"st"}[e.target.id];if(m){S.stuF[m]=e.target.value;render()}});
 document.addEventListener("input",e=>{if(e.target.id==="stuQ"){S.stuQ=e.target.value;const pos=e.target.selectionStart;render();const i=$("#stuQ");if(i){i.focus();i.setSelectionRange(pos,pos)}return}if(e.target.id==="stuNote"){S.stuNotes[e.target.dataset.id]=e.target.value;return}if(e.target.id==="hwIn")S.hw.text=e.target.value;if(e.target.id==="genIn")S.genWords=e.target.value});
@@ -2175,7 +2228,7 @@ function loadGroup(g){
   const dur=/^(sab|dom)/.test(id)&&id!=="dom9"?"2:00:00":"1:00:00";
   const QQ=(window.__QA||{})[g.id]||{},PW=(window.__PW||{})[g.id]||{};
   REAL[id]=(g.classes||[]).map(c=>Object.assign({},c,{dur:c.dur||dur,sg:g.id},QQ[c.iso]?{qa:QQ[c.iso]}:{},PW[c.iso]&&PW[c.iso].length?{words:PW[c.iso]}:{}));
-  ATTD[id]=g.att||{};HWD[id]=g.hw||{};RECS[id]=g.recs||{};
+  ATTD[id]=g.att||{};HWD[id]=g.hw||{};HWSID[id]=g.id;RECS[id]=g.recs||{};
   const gr=GRP.find(x=>x.id===id);if(gr&&g.students)gr.st=g.students.slice();
   STAT[id]={};(g.students||[]).forEach(n=>{let p=0,t=0;Object.values(g.att||{}).forEach(a=>{if(a[n]){t++;if(a[n]==="P")p++}});STAT[id][n]=[p,t]});
 }
@@ -2248,7 +2301,7 @@ function start(){
   if(cached){ME=cached.me;fresh.catch(e=>{if(/login|token/i.test(e.message)){try{localStorage.removeItem("mc_data")}catch(_){}loginBox("Tu sesión terminó. Entra otra vez.")}})}
   (cached?Promise.resolve(cached.d):fresh).then(d=>{if(!d)return;
     const m=ME||{};
-    if(m.role==="teacher"){window.__QA=d.preguntas||{};window.__PW=d.palabras||{};Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
+    if(m.role==="teacher"){window.__HWE=d.hwEdits||{};window.__QA=d.preguntas||{};window.__PW=d.palabras||{};Object.values(d.all||{}).forEach(loadGroup);try{applyTeacher(d)}catch(e){console.error(e)}S.role="prof";S.profTab="panel";
       const first=GRP.find(g=>g.st&&g.st.length)||GRP[0];S.who={g:first.id,n:first.st[0]||""};applyWho();
       if(/[?&]as=student/.test(location.search)){S.admin=true;S.role="vivo";S.account.plan="vivo";S.tab="hoy";S.inClass=false;applyWho()}
       api("hwList").then(L=>{HWLIST=L||[];render()});render();return}
@@ -2334,15 +2387,18 @@ start();
 /* ===== Vista previa (solo profesor): dispositivo + modo invitado ===== */
 (function(){if(window.top!==window.self)return;const D={m:[390,844,"휴대폰 390×844"],t:[820,1180,"태블릿 820×1180"]};
   const box=document.createElement("div");box.className="devpick";box.hidden=true;box.setAttribute("role","group");box.setAttribute("aria-label","미리보기");
-  box.innerHTML='<div class="dprow"><button type="button" data-d="m">휴대폰</button><button type="button" data-d="t">태블릿</button><button type="button" data-d="d">PC</button></div><div class="dprow"><button type="button" data-v="prof">선생님</button><button type="button" data-v="stu">학생</button><button type="button" data-v="guest">Invitado</button></div>';document.body.appendChild(box);
-  let dev="d",view="prof",ov=null;
-  const draw=()=>{box.querySelectorAll("[data-d]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.d===dev));box.querySelectorAll("[data-v]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===view));
+  box.innerHTML='<div class="dprow"><button type="button" data-d="m">휴대폰</button><button type="button" data-d="t">태블릿</button><button type="button" data-d="d">PC</button></div><div class="dprow"><button type="button" data-v="prof">선생님</button><button type="button" data-v="stu">학생</button><button type="button" data-v="guest">Invitado</button></div><div class="dprow dpzoom" hidden><button type="button" data-z="1">🔍 화면 크게 보기</button></div>';document.body.appendChild(box);
+  let dev="d",view="prof",ov=null,zoom=false;
+  const draw=()=>{box.querySelector("[data-z]").setAttribute("aria-pressed",zoom);box.querySelector(".dpzoom").hidden=dev==="d";box.querySelectorAll("[data-d]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.d===dev));box.querySelectorAll("[data-v]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===view));
     if(ov){ov.remove();ov=null}if(dev==="d"&&view==="prof")return;
     const base=location.href.split("#")[0].split("?")[0]+(view==="guest"?"?as=guest":view==="stu"?"?as=student":"?as=prof")+"&v="+Date.now();
     let w,h,cap;if(dev==="d"){w=Math.min(1280,window.innerWidth-40);h=window.innerHeight-130;cap="PC"}else{[w,h,cap]=D[dev]}
-    const sc=dev==="d"?1:Math.min(1,(window.innerHeight-190)/(h+24));ov=document.createElement("div");ov.className="devov";
+    let sc=dev==="d"?1:Math.min(1,(window.innerHeight-190)/(h+24));
+    if(zoom&&dev!=="d"){sc=Math.max(1,Math.min((window.innerWidth-40)/(w+24),(window.innerHeight-24)/420,2.4));h=Math.round((window.innerHeight-24)/sc-24)}
+    ov=document.createElement("div");ov.className="devov"+(zoom&&dev!=="d"?" zoom":"");
     ov.innerHTML='<div class="cap">'+cap+' · '+(view==="guest"?"Invitado 화면":view==="stu"?"학생 화면":"선생님 화면")+' · 미리보기</div><div class="frame" style="transform:scale('+sc+');transform-origin:top center;margin-bottom:'+(-(h+24)*(1-sc))+'px"><iframe src="'+base+'" style="width:'+w+'px;height:'+h+'px" title="'+cap+'"></iframe></div>';document.body.appendChild(ov)};
-  box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.d)dev=b.dataset.d;if(b.dataset.v)view=b.dataset.v;draw()});
+  box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.d)dev=b.dataset.d;if(b.dataset.v)view=b.dataset.v;if(b.dataset.z)zoom=!zoom;draw()});
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&zoom){zoom=false;draw()}});let rz=0;addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{if(ov)draw()},250)});
   draw();setInterval(()=>{const prof=typeof S!=="undefined"&&S&&S.role==="prof";box.hidden=!prof;if(!prof&&ov){dev="d";view="prof";draw()}},1000)})();
 </script>
 <script>
